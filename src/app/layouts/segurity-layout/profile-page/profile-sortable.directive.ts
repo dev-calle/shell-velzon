@@ -1,5 +1,5 @@
 import {Directive, EventEmitter, Input, Output} from '@angular/core';
-import { projectListModel } from '../../interfaces/profile.interfaces';
+import { projectListModel } from '../../../interfaces/profile.interfaces';
 
 export type SortColumn = keyof projectListModel | '';
 export type SortDirection = 'asc' | 'desc' | '';

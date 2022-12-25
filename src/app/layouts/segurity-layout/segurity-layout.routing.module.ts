@@ -3,26 +3,20 @@ import { NgModule } from '@angular/core';
 
 import { UserComponent } from './user/user.component';
 import { RoleComponent } from './role/role.component';
-import { NotFoundComponent } from '../../helpers/not-found/not-found.component';
-import { ProfileComponent } from '../../helpers/profile/profile.component';
+import { NotFoundPageComponent } from '../../pages/not-found-page/not-found-page.component';
+import { ProfilePageComponent } from './profile-page/profile-page.component';
+import { SegurityLayoutComponent } from './segurity-layout.component';
+
+
 
 const routes: Routes = [
-  { path: '', component: UserComponent },
-  { path: 'user', component: UserComponent },
-  { path: 'role', component: RoleComponent },
   {
-    path: 'profile',
-    pathMatch: 'full',
-    component: ProfileComponent
+    path: 'segurity',
+    component: SegurityLayoutComponent,
+    loadChildren: () => import('./segurity-layout.routes.module').then( (m) => m.SegurityChildRoutingModule )
   },
-  { path: '**', component: NotFoundComponent },
-
-  //{ path: 'path/:routeParam', component: MyComponent },
-  //{ path: 'staticPath', component: ... },
-  //{ path: '**', component: ... },
-  //{ path: 'oldPath', redirectTo: '/staticPath' },
-  //{ path: ..., component: ..., data: { message: 'Custom' }
 ];
+
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
