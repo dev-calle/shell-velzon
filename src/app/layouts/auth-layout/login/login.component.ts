@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { APP_NAME } from 'src/constants/app.constants';
+import { APP_NAME } from 'src/app/constants/app.constants';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -45,6 +45,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     if(!this.loginForm.valid) return;
     this.submitted = false;
     this.login$ = this._authService.login(this.buildLoginForm()).subscribe(resp => {
+      const { token } = resp;
+      this._authService.setToken(token);
       this._router.navigate(['/segurity']);
     });
   }

@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { NotFoundPageComponent } from '../../pages/not-found-page/not-found-page.component';
 import { AuthLayoutComponent } from './auth-layout.component';
+import { LoginGuard } from 'src/app/guards/login.guard';
 
 const _authRoutes: Routes = [
   {
@@ -37,6 +38,7 @@ const routes: Routes = [
   {
     path: 'auth',
     component: AuthLayoutComponent,
+    canActivate: [LoginGuard],
     children: _authRoutes
   },
 ];

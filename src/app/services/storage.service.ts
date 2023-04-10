@@ -1,19 +1,36 @@
 import { Injectable } from '@angular/core';
 
-const USER_KEY = 'currentUser';
-
 @Injectable({providedIn: 'root'})
-export class StorageService {
+export abstract class StorageService implements Storage {
+	constructor(protected readonly api: Storage) {}
 
-  constructor() { }
+	get length(): number {
+		return this.api.length;
+	}
 
-  public getUser(): any {
-    const user = window.localStorage.getItem(USER_KEY);
-    if (user) {
-      return JSON.parse(user);
-    }
+	setItem(key: string, value: unknown): void {
+		let data = JSON.stringify(value);
+		this.api.setItem(key, data);
+	}
 
-    return {};
-  }
+	getItem<T>(key: string): T | null {
+		const data = this.api.getItem(key);
 
+		if (data !== null) {
+			return JSON.parse(data) as T;
+		}
+
+		return null;
+	}
+
+	clear(): void {
+		this.api.clear();
+	}
+
+	key(index: number): string | null {
+		return this.api.key(index);
+	}
+	removeItem(key: string): void {
+		this.api.removeItem(key);
+	}
 }

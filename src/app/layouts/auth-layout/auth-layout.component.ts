@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { APP_NAME } from 'src/constants/app.constants';
+import { APP_NAME } from 'src/app/constants/app.constants';
 
 @Component({
   selector: 'app-auth-layout',

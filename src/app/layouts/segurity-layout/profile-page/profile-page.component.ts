@@ -79,7 +79,7 @@ export class ProfilePageComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.userData =  this._st.getUser();
+    //this.userData =  this._st.getUser();
     this.fetchData();
   }
 

@@ -5,6 +5,8 @@ import { cartData } from 'src/app/utils';
 import { CartModel } from '../../../interfaces/topbar.interfaces';
 import { LanguageService } from '../../../services/language.service';
 import { EventService } from '../../../services/event.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-topbar',
@@ -48,7 +50,9 @@ export class TopbarComponent implements OnInit {
   constructor(
     @Inject(DOCUMENT) private document: any,
     public languageService: LanguageService,
-    private  eventService: EventService
+    private  eventService: EventService,
+    private _storageService: LocalStorageService,
+    private _router: Router
   ) { }
 
   ngOnInit(): void {
@@ -207,7 +211,8 @@ export class TopbarComponent implements OnInit {
   }
 
   logout() {
-
+    this._storageService.clear();
+    this._router.navigate(['/auth']);
   }
 
 }
