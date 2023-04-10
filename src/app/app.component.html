@@ -1,1 +1,7 @@
+<div class="loader-container" *ngIf="isLoading$ | async">
+    <div class="lds-spinner">
+        <div></div><div></div><div></div><div></div><div></div><div></div>
+        <div></div><div></div><div></div><div></div><div></div><div></div>
+    </div>
+</div>
 <router-outlet></router-outlet>
