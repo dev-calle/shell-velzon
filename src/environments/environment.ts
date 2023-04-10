@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  timesheet_server: 'https://sotime-api-general.herokuapp.com/api/v1'
 };
 
 /*
