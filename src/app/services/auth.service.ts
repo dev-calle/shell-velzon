@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { STORAGE_TOKEN } from '../constants/storage.constants';
+import { STORAGE_TOKEN, STORAGE_USER_DATA } from '../constants/storage.constants';
 import { LocalStorageService } from './local-storage.service';
 import { ILoginRes } from '../interfaces/login.interfaces';
+import { User } from '../redux/interfaces/auth.interface';
 
 const { timesheet_server: URI } = environment;
 
@@ -24,6 +25,14 @@ export class AuthService {
 
   getToken() {
     return this.storageService.getItem<string>(STORAGE_TOKEN);
+  }  
+
+  setUserData(user: User) {
+    this.storageService.setItem(STORAGE_USER_DATA, user);
+  }
+
+  getUserData() {
+    return this.storageService.getItem<User>(STORAGE_USER_DATA);
   }  
 
   isLoggedIn(): boolean {

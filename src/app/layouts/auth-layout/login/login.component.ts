@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.login$ = this._authService.login(this.buildLoginForm()).subscribe(resp => {
       const { token, data: user } = resp;
       this._authService.setToken(token);
+      this,this._authService.setUserData(user);
       this._store.dispatch(loginSuccess({ token, user }));
       this._router.navigate(['/segurity']);
     });
