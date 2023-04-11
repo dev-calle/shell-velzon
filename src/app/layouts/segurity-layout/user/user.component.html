@@ -1,12 +1,18 @@
 <div class="card">
     <div class="card-header">
-        <h4 class="card-title mb-0 flex-grow-1">Lista de usuarios</h4>
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0 flex-grow-1">Lista de usuarios</h4>
+            <button class="btn btn-primary d-flex gap-1" (click)="open(content)">
+                <i class="ri-user-add-fill"></i> Agregar usuario
+            </button>
+        </div>
     </div>
     <div class="card-body">
 
         <form class="app-search d-none d-md-block" [formGroup]="formSearch">
             <div class="position-relative">
-                <input type="text" class="form-control" placeholder="Buscar usuario" autocomplete="off" formControlName="filter">
+                <input type="text" class="form-control" placeholder="Buscar usuario" autocomplete="off"
+                    formControlName="filter">
                 <span class="mdi mdi-magnify search-widget-icon"></span>
                 <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"></span>
             </div>
@@ -33,6 +39,65 @@
                 </tbody>
             </table>
         </div>
-        <app-pagination [totalPages]="totalPages" [currentPage]="currentPage" (pageChanged)="onPageChanged($event)"></app-pagination>
+        <app-pagination [totalPages]="totalPages" [currentPage]="currentPage"
+            (pageChanged)="onPageChanged($event)"></app-pagination>
     </div>
 </div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="userModalLabel">Agregar Usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="modal.close()"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="formAddUser">
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="code" class="form-label">Código</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" id="code" placeholder="Ingrese código" formControlName="code">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="name" class="form-label">Nombre</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" id="name" placeholder="Ingrese nombre" formControlName="name">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="lastname" class="form-label">Apellido</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="url" class="form-control" id="lastname" placeholder="Ingrese apellido" formControlName="lastname">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="content" class="form-label">Contenido</label>
+                </div>
+                <div class="col-lg-9">
+                    <textarea class="form-control" id="content" rows="3"
+                        placeholder="Ingrese contenido" formControlName="content"></textarea>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="leaveemails" class="form-label">Roles</label>
+                </div>
+                <div class="col-lg-9">
+                    <ng-select [items]="roles" [multiple]="true" formControlName="roles"
+                        bindLabel="name" bindValue="id" placeholder="Agregue roles"></ng-select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="modal.close()">Cerrar</button>
+        <button type="button" class="btn btn-primary">Guardar</button>
+    </div>
+</ng-template>

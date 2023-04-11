@@ -10,7 +10,7 @@ import { UserComponent } from './user/user.component';
 import { RoleComponent } from './role/role.component';
 
 import { SwiperModule } from 'swiper/angular';
-import { NgbNavModule, NgbDropdownModule, NgbAccordionModule, NgbTooltipModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbNavModule, NgbDropdownModule, NgbAccordionModule, NgbTooltipModule, NgbPaginationModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 
 import { FeatherModule } from 'angular-feather';
@@ -20,6 +20,8 @@ import { allIcons } from 'angular-feather/icons';
 import { defineElement } from 'lord-icon-element';
 import lottie from 'lottie-web';
 import { RouterModule } from '@angular/router';
+
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -42,9 +44,11 @@ import { RouterModule } from '@angular/router';
     NgbAccordionModule,
     NgbTooltipModule,
     NgbPaginationModule,
+    NgbModalModule,
     FeatherModule.pick(allIcons),
 
-    RouterModule
+    RouterModule,
+    NgSelectModule
   ],
 })
 export class SegurityLayoutModule {
