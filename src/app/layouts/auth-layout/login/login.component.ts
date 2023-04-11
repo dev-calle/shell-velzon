@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { APP_NAME } from 'src/app/constants/app.constants';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AuthState } from 'src/app/redux/interfaces/auth.interface';
+import { loginSuccess } from 'src/app/redux/actions/auth.action';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +27,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private _formBuilder: FormBuilder,
     private _authService: AuthService,
     private _router: Router,
+    private _store: Store<AuthState>
    ) {
 
     this.loginForm = this._formBuilder.group({
@@ -45,8 +49,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     if(!this.loginForm.valid) return;
     this.submitted = false;
     this.login$ = this._authService.login(this.buildLoginForm()).subscribe(resp => {
-      const { token } = resp;
+      const { token, data: user } = resp;
       this._authService.setToken(token);
+      this._store.dispatch(loginSuccess({ token, user }));
       this._router.navigate(['/segurity']);
     });
   }

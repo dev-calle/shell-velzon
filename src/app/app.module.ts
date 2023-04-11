@@ -16,6 +16,8 @@ import { ErrorPageComponent } from './pages/error-page/error-page.component';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { InterceptorService } from './services/interceptor.service';
+import { StoreModule } from '@ngrx/store';
+import { appReducer } from './app.state';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -46,6 +48,7 @@ export function createTranslateLoader(http: HttpClient): any {
 
     AuthLayoutModule,
     SegurityLayoutModule,
+    StoreModule.forRoot( appReducer )
   ],
   providers: [
     {

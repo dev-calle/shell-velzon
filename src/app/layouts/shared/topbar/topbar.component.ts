@@ -7,6 +7,10 @@ import { LanguageService } from '../../../services/language.service';
 import { EventService } from '../../../services/event.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { Router } from '@angular/router';
+import { AuthState } from 'src/app/redux/interfaces/auth.interface';
+import { Store, select } from '@ngrx/store';
+import { AppState } from 'src/app/app.state';
+import { logout } from 'src/app/redux/actions/auth.action';
 
 @Component({
   selector: 'app-topbar',
@@ -28,9 +32,9 @@ export class TopbarComponent implements OnInit {
   countryName: any;
   cookieValue: any;
   userData = {
-    first_name: 'William',
-    last_name: 'Calle',
-    role: 'Admin'
+    first_name: '',
+    last_name: '',
+    role: ''
   };
 
    /***
@@ -52,10 +56,12 @@ export class TopbarComponent implements OnInit {
     public languageService: LanguageService,
     private  eventService: EventService,
     private _storageService: LocalStorageService,
-    private _router: Router
+    private _router: Router,
+    private _store: Store<AppState>
   ) { }
 
   ngOnInit(): void {
+    this.loadUserData();
   }
 
   /***
@@ -212,7 +218,18 @@ export class TopbarComponent implements OnInit {
 
   logout() {
     this._storageService.clear();
+    this._store.dispatch(logout());
     this._router.navigate(['/auth']);
+  }
+
+  loadUserData() {
+    this._store.pipe(select(state => state.auth.user)).subscribe(resp => {
+      this.userData = {
+        first_name: resp?.nombre ?? '',
+        last_name: resp?.apellido ?? '',
+        role: 'Admin'
+      }     
+    });
   }
 
 }
