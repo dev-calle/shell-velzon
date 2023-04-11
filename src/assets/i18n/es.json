@@ -9,10 +9,10 @@
       "TEXT": "MENÚ"
     },
     "DASHBOARD": {
-      "TEXT": "Tablero",
+      "TEXT": "Usuarios",
       "BADGE": "Nuevo",
       "LIST": {
-        "ANALYTICS": "Analítica",
+        "TABLEUSERS": "Listar Usuarios",
         "CRM": "CRM",
         "ECOMMERCE": "Comercio electrónico",
         "CRYPTO": "Cripto",

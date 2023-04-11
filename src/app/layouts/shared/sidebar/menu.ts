@@ -9,12 +9,12 @@ export const MENU: MenuItem[] = [
   {
     id: 2,
     label: 'MENUITEMS.DASHBOARD.TEXT',
-    icon: 'ri-dashboard-2-line',
+    icon: ' ri-shield-user-fill',
     subItems: [
       {
         id: 3,
-        label: 'MENUITEMS.DASHBOARD.LIST.ANALYTICS',
-        link: '/analytics',
+        label: 'MENUITEMS.DASHBOARD.LIST.TABLEUSERS',
+        link: '/segurity/user',
         parentId: 2
       },
       {

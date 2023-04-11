@@ -1,1 +1,38 @@
-<p>user works!</p>
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title mb-0 flex-grow-1">Lista de usuarios</h4>
+    </div>
+    <div class="card-body">
+
+        <form class="app-search d-none d-md-block" [formGroup]="formSearch">
+            <div class="position-relative">
+                <input type="text" class="form-control" placeholder="Buscar usuario" autocomplete="off" formControlName="filter">
+                <span class="mdi mdi-magnify search-widget-icon"></span>
+                <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"></span>
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Código</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido</th>
+                        <th scope="col">Contenido</th>
+                        <th scope="col">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of users">
+                        <th scope="row">{{ user.codigo }}</th>
+                        <td>{{ user.nombre }}</td>
+                        <td>{{ user.apellido }}</td>
+                        <td>{{ user.contenido }}</td>
+                        <td><span class="badge bg-success">{{ user.estado }}</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <app-pagination [totalPages]="totalPages" [currentPage]="currentPage" (pageChanged)="onPageChanged($event)"></app-pagination>
+    </div>
+</div>
