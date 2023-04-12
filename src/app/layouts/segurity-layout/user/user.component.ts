@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { Subject, Subscription, debounceTime } from 'rxjs';
 import { User } from 'src/app/interfaces/users.interface';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { nonEmptyArrayValidator } from 'src/app/utils';
+import { OPTION } from 'src/app/constants/option.constants';
 
 @Component({
   selector: 'app-user',
@@ -21,12 +22,15 @@ export class UserComponent implements OnInit, OnDestroy {
   users: User[] = [];
 
   roles = [
-    { id: '9ce25d5c-3a17-4443-b7f9-1540231b4ece', name: 'Integration' }
+    { id: '331e62a6-1980-499c-ac15-2a4042327e9c', name: 'Admin' }
   ];
   selectedValues: string[] = [];
   formAddUser!: FormGroup;
   addUser$?: Subscription;
   modalRef!: NgbModalRef;
+
+  currentIdUser = '';
+  option = OPTION.ADD;
 
   private searchSubject = new Subject<string>();
 
@@ -105,19 +109,26 @@ export class UserComponent implements OnInit, OnDestroy {
 
   open(content: TemplateRef<any>) {
     this.modalRef = this._modalService.open(content);
-    this.modalRef.closed.subscribe(() => this.formAddUser.reset());
+    this.modalRef.closed.subscribe(() => { 
+      this.formAddUser.reset();
+      this.option = OPTION.ADD;
+    });
   }
 
-  onSubmitAdduser() {
-    debugger
+  onSubmitUser() {
     if(!this.formAddUser.valid) {
       this.formAddUser.markAllAsTouched();
       return;
     }
-    this.addUser$ = this._userService.addUser(this.buildFormAddUser()).subscribe(() => {
+    const service$ = this.option === OPTION.ADD ? 
+      this._userService.addUser(this.buildFormAddUser()) : 
+      this._userService.editUser(this.currentIdUser, this.buildFormAddUser());
+    this.addUser$ = service$.subscribe(() => {
       this.formAddUser.reset();
       this.onListUsers();
       this.modalRef.close();
+      this.currentIdUser = '';
+      this.option = OPTION.ADD;
     })
   }
 
@@ -129,6 +140,29 @@ export class UserComponent implements OnInit, OnDestroy {
       contenido: this.fModal['content'].value,
       roles: this.fModal['roles'].value
     }
+  }
+
+  onAddUser(content: TemplateRef<any>) {
+    this.option = OPTION.ADD;
+    this.open(content);
+  }
+
+  onEditUser(id: string, content: TemplateRef<any>) {
+    this._userService.getUser(id).subscribe(resp => {
+      this.option = OPTION.EDIT;
+      this.currentIdUser = id;
+      this.loadDataUserForm(resp.data);
+      this.open(content);
+    })
+  }
+
+  loadDataUserForm(user: User) {
+    this.fModal['code'].setValue(user.codigo);
+    this.fModal['name'].setValue(user.nombre);
+    this.fModal['lastname'].setValue(user.apellido);
+    this.fModal['content'].setValue(user.contenido);
+    const roles = user.roles?.map(r => r.idrol);
+    this.fModal['roles'].setValue(roles);
   }
 
   ngOnDestroy(): void {

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { IUserRes } from '../interfaces/users.interface';
 import { IAddUserRes } from '../interfaces/add-user.interface';
+import { IItemUserRes } from '../interfaces/item-user.interface';
 
 const { timesheet_server: URI } = environment;
 
@@ -23,5 +24,13 @@ export class UserService {
 
   addUser(body: any) {
     return this._http.post<IAddUserRes>(`${URI}/user`, body);
+  }
+
+  getUser(id: string) {
+    return this._http.get<IItemUserRes>(`${URI}/user/${id}`);
+  }
+
+  editUser(id: string, body: any) {
+    return this._http.patch<IAddUserRes>(`${URI}/user/${id}`, body);
   }
 }
