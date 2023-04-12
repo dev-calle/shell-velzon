@@ -4,3 +4,14 @@
 /* Importing Bootstrap SCSS file. */
 
 // @import '~bootstrap/scss/bootstrap';
+
+ng-select.required.ng-invalid.ng-touched {
+    .ng-select-container{
+        border-color: #dc3545;
+    }
+}
+ng-select.ng-invalid.ng-touched {
+    .ng-select-container{
+        border-color: #dc3545;
+    }
+}

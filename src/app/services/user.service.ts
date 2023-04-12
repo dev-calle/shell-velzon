@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { IUserRes } from '../interfaces/users.interface';
+import { IAddUserRes } from '../interfaces/add-user.interface';
 
 const { timesheet_server: URI } = environment;
 
@@ -18,5 +19,9 @@ export class UserService {
     params = params.set('page', page);
     params = params.set('filter', filter);
     return this._http.get<IUserRes>(`${URI}/user`, { params });
+  }
+
+  addUser(body: any) {
+    return this._http.post<IAddUserRes>(`${URI}/user`, body);
   }
 }

@@ -3,7 +3,8 @@ import { UserService } from 'src/app/services/user.service';
 import { Subject, Subscription, debounceTime } from 'rxjs';
 import { User } from 'src/app/interfaces/users.interface';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { nonEmptyArrayValidator } from 'src/app/utils';
 
 @Component({
   selector: 'app-user',
@@ -11,8 +12,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit, OnDestroy {
-
-  @ViewChild('myModal') myModal!: ElementRef;
 
   formSearch!: FormGroup;
   currentPage = 1;
@@ -26,14 +25,16 @@ export class UserComponent implements OnInit, OnDestroy {
   ];
   selectedValues: string[] = [];
   formAddUser!: FormGroup;
+  addUser$?: Subscription;
+  modalRef!: NgbModalRef;
 
   private searchSubject = new Subject<string>();
 
   constructor(
-    private _userService: UserService, 
+    private _userService: UserService,
     private _fb: FormBuilder,
     public _modalService: NgbModal
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -43,6 +44,8 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   get f() { return this.formSearch.controls; }
+
+  get fModal() { return this.formAddUser.controls; }
 
   createForm() {
     this.formSearch = this._fb.group({
@@ -55,8 +58,8 @@ export class UserComponent implements OnInit, OnDestroy {
       code: [null, [Validators.required]],
       name: [null, [Validators.required]],
       lastname: [null, [Validators.required]],
-      content: [null, []],
-      roles: [[], []]
+      content: [null, [Validators.required]],
+      roles: [[], [Validators.required, nonEmptyArrayValidator]]
     })
   }
 
@@ -101,10 +104,35 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   open(content: TemplateRef<any>) {
-    this._modalService.open(content);
+    this.modalRef = this._modalService.open(content);
+    this.modalRef.closed.subscribe(() => this.formAddUser.reset());
+  }
+
+  onSubmitAdduser() {
+    debugger
+    if(!this.formAddUser.valid) {
+      this.formAddUser.markAllAsTouched();
+      return;
+    }
+    this.addUser$ = this._userService.addUser(this.buildFormAddUser()).subscribe(() => {
+      this.formAddUser.reset();
+      this.onListUsers();
+      this.modalRef.close();
+    })
+  }
+
+  buildFormAddUser() {
+    return {
+      codigo: this.fModal['code'].value,
+      nombre: this.fModal['name'].value,
+      apellido: this.fModal['lastname'].value,
+      contenido: this.fModal['content'].value,
+      roles: this.fModal['roles'].value
+    }
   }
 
   ngOnDestroy(): void {
     this.users$?.unsubscribe();
+    this.addUser$?.unsubscribe();
   }
 }

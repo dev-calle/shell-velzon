@@ -1,3 +1,5 @@
+import { FormControl, ValidationErrors } from "@angular/forms";
+
 const cartData = [
   { id: 1, img: 'assets/images/products/img-1.png', product: "Branded T-Shirts", quantity: 10, price: 32 },
   { id: 2, img: 'assets/images/products/img-2.png', product: "Bentwood Chair", quantity: 5, price: 18 },
@@ -6,3 +8,10 @@ const cartData = [
   { id: 5, img: 'assets/images/products/img-5.png', product: "Stillbird Helmet", quantity: 2, price: 495 },
 ];
 export { cartData };
+
+export function nonEmptyArrayValidator(control: FormControl): ValidationErrors | null {
+  if (!control.value || control.value.length === 0) {
+    return { nonEmptyArray: true };
+  }
+  return null;
+}
