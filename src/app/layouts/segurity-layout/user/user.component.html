@@ -43,7 +43,9 @@
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger btn-sm"><i class="ri-delete-bin-fill"></i></button>
+                            <button class="btn btn-danger btn-sm" (click)="onDeleteUser(user.idusuario, user.nombre, user.apellido)">
+                                <i class="ri-delete-bin-fill"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

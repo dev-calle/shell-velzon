@@ -33,4 +33,8 @@ export class UserService {
   editUser(id: string, body: any) {
     return this._http.patch<IAddUserRes>(`${URI}/user/${id}`, body);
   }
+
+  deleteUser(id: string) {
+    return this._http.delete<any>(`${URI}/user/${id}`);
+  }
 }

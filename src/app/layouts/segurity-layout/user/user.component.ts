@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { nonEmptyArrayValidator } from 'src/app/utils';
 import { OPTION } from 'src/app/constants/option.constants';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-user',
@@ -37,7 +38,8 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(
     private _userService: UserService,
     private _fb: FormBuilder,
-    public _modalService: NgbModal
+    public _modalService: NgbModal,
+    private _alertService: AlertService
   ) { }
 
   ngOnInit(): void {
@@ -109,19 +111,19 @@ export class UserComponent implements OnInit, OnDestroy {
 
   open(content: TemplateRef<any>) {
     this.modalRef = this._modalService.open(content);
-    this.modalRef.closed.subscribe(() => { 
+    this.modalRef.closed.subscribe(() => {
       this.formAddUser.reset();
       this.option = OPTION.ADD;
     });
   }
 
   onSubmitUser() {
-    if(!this.formAddUser.valid) {
+    if (!this.formAddUser.valid) {
       this.formAddUser.markAllAsTouched();
       return;
     }
-    const service$ = this.option === OPTION.ADD ? 
-      this._userService.addUser(this.buildFormAddUser()) : 
+    const service$ = this.option === OPTION.ADD ?
+      this._userService.addUser(this.buildFormAddUser()) :
       this._userService.editUser(this.currentIdUser, this.buildFormAddUser());
     this.addUser$ = service$.subscribe(() => {
       this.formAddUser.reset();
@@ -163,6 +165,33 @@ export class UserComponent implements OnInit, OnDestroy {
     this.fModal['content'].setValue(user.contenido);
     const roles = user.roles?.map(r => r.idrol);
     this.fModal['roles'].setValue(roles);
+  }
+
+  onDeleteUser(id: string, name: string, lastname: string) {
+    this._alertService.show({
+      title: `¿Eliminar a ${name} ${lastname}?`,
+      text: "¡No podrás revertir esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Sí, eliminar!'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.deleteUser(id);
+      }
+    })
+  }
+
+  deleteUser(id: string) {
+    return this._userService.deleteUser(id).subscribe(() => {
+      this._alertService.show({ 
+        title: 'Eliminado', 
+        text: 'El usuario ha sido eliminado', 
+        icon: 'success', 
+        confirmButtonText: 'Aceptar' 
+      });
+      this.onListUsers();
+    })
   }
 
   ngOnDestroy(): void {
