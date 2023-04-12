@@ -3,7 +3,7 @@ import { UntypedFormBuilder } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { projectListModel, documentModel } from '../../../interfaces/profile.interfaces';
 
-import { NgbdProfileSortableHeader, SortEvent } from './profile-sortable.directive';
+import { NgbdProfileSortableHeader } from './profile-sortable.directive';
 
 // import Swiper core and required modules
 import { SwiperOptions } from 'swiper';
@@ -11,7 +11,8 @@ import { SwiperComponent } from "swiper/angular";
 
 // Swiper Slider
 // import { SwiperComponent, SwiperDirective } from 'swiper';
-import { StorageService } from '../../../services/storage.service';
+import { AppState } from 'src/app/app.state';
+import { Store, select } from '@ngrx/store';
 
 @Component({
   selector: 'app-profile-page',
@@ -22,7 +23,12 @@ export class ProfilePageComponent implements OnInit {
 
   projectList!: projectListModel[];
   document!: documentModel[];
-  userData:any;
+  userData = {
+    first_name: '',
+    last_name: '',
+    role: '',
+    email: ''
+  };
 
   /**
    * Swiper setting
@@ -31,11 +37,11 @@ export class ProfilePageComponent implements OnInit {
     slidesPerView: 1,
     initialSlide: 0,
     spaceBetween: 25,
-    breakpoints:{
-      768:{
+    breakpoints: {
+      768: {
         slidesPerView: 2,
       },
-      1200:{
+      1200: {
         slidesPerView: 3,
       }
     }
@@ -47,7 +53,7 @@ export class ProfilePageComponent implements OnInit {
   @ViewChild('swiper', { static: false }) swiper?: SwiperComponent;
 
   // Table data
-  ListJsList : projectListModel[] = [
+  ListJsList: projectListModel[] = [
     {
       title: 'Lorem ipsum',
       updatedTime: new Date(),
@@ -69,7 +75,7 @@ export class ProfilePageComponent implements OnInit {
   constructor(
     private formBuilder: UntypedFormBuilder,
     private modalService: NgbModal,
-    private _st : StorageService,
+    private _store: Store<AppState>
     // public service: ProfileService
   ) {
 
@@ -78,8 +84,7 @@ export class ProfilePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    //this.userData =  this._st.getUser();
+    this.loadUserData();
     this.fetchData();
   }
 
@@ -91,10 +96,10 @@ export class ProfilePageComponent implements OnInit {
   }
 
 
-  nextSlideComp(){
+  nextSlideComp() {
     this.swiper?.swiperRef.slideNext(100);
   }
-  previousSlideComp(){
+  previousSlideComp() {
     this.swiper?.swiperRef.slidePrev(100);
   }
 
@@ -102,14 +107,25 @@ export class ProfilePageComponent implements OnInit {
    * Confirmation mail model
    */
   deleteId: any;
-  confirm(content:any,id:any) {
+  confirm(content: any, id: any) {
     this.deleteId = id;
     this.modalService.open(content, { centered: true });
   }
 
   // Delete Data
-  deleteData(id:any) {
+  deleteData(id: any) {
     // document.getElementById('')
+  }
+
+  loadUserData() {
+    this._store.pipe(select(state => state.auth.user)).subscribe(resp => {
+      this.userData = {
+        first_name: resp?.nombre ?? '',
+        last_name: resp?.apellido ?? '',
+        role: 'Admin',
+        email: resp?.contenido ?? ''
+      }
+    });
   }
 
 }

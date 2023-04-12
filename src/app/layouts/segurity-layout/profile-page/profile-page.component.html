@@ -15,10 +15,6 @@
             <div class="p-2">
                 <h3 class="text-white mb-1">{{userData.first_name}} {{userData.last_name}}</h3>
                 <p class="text-white-75">{{userData.role}}</p>
-                <div class="hstack text-white-50 gap-1">
-                    <div class="me-2"><i class="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>{{userData.city}}, {{userData.country}}</div>
-                    <div><i class="ri-building-line me-1 text-white-75 fs-16 align-middle"></i>Themesbrand</div>
-                </div>
             </div>
         </div>
         <!--end col-->
@@ -80,7 +76,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th class="ps-0" scope="row">Mobile :</th>
-                                                            <td class="text-muted">{{userData.phone}}</td>
+                                                            <td class="text-muted">{{'999 999 999'}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th class="ps-0" scope="row">E-mail :</th>
@@ -88,11 +84,11 @@
                                                         </tr>
                                                         <tr>
                                                             <th class="ps-0" scope="row">Location :</th>
-                                                            <td class="text-muted">{{userData.city}}, {{userData.country}}</td>
+                                                            <td class="text-muted">{{'Lima'}}, {{'Perú'}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th class="ps-0" scope="row">Joining Date</th>
-                                                            <td class="text-muted">{{userData.joining_date}}</td>
+                                                            <td class="text-muted">{{'12/04/2023'}}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -144,7 +140,7 @@
                                         <div class="card-body">
                                             <h5 class="card-title mb-4">Skills</h5>
                                             <div class="d-flex flex-wrap gap-2 fs-15">
-                                                <a href="javascript:void(0);" class="badge badge-soft-primary" *ngFor="let skill of userData.skills">{{skill}}</a>
+                                                <a href="javascript:void(0);" class="badge badge-soft-primary" *ngFor="let skill of []">{{skill}}</a>
                                             </div>
                                         </div>
                                         <!-- end card body -->
@@ -283,7 +279,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title mb-3">About</h5>
-                                            <p>{{userData.Description}}</p>
+                                            <p>{{'Lorem inpsum'}}</p>
                                             <div class="row">
                                                 <div class="col-6 col-md-4">
                                                     <div class="d-flex mt-4">
@@ -294,7 +290,7 @@
                                                         </div>
                                                         <div class="flex-grow-1 overflow-hidden">
                                                             <p class="mb-1">Designation :</p>
-                                                            <h6 class="text-truncate mb-0">{{userData.designation}}</h6>
+                                                            <h6 class="text-truncate mb-0">{{'TI'}}</h6>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -308,7 +304,7 @@
                                                         </div>
                                                         <div class="flex-grow-1 overflow-hidden">
                                                             <p class="mb-1">Website :</p>
-                                                            <a href="javascript:void(0);" class="fw-semibold">{{userData.website}}</a>
+                                                            <a href="javascript:void(0);" class="fw-semibold">{{'website.com'}}</a>
                                                         </div>
                                                     </div>
                                                 </div>

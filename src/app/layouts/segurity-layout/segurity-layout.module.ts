@@ -22,6 +22,7 @@ import lottie from 'lottie-web';
 import { RouterModule } from '@angular/router';
 
 import { NgSelectModule } from '@ng-select/ng-select';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     RouterModule,
     NgSelectModule
   ],
+  providers: [LocalStorageService]
 })
 export class SegurityLayoutModule {
 
