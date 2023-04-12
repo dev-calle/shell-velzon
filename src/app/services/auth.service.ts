@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { STORAGE_TOKEN, STORAGE_USER_DATA } from '../constants/storage.constants';
+import { STORAGE_REMEMBER_ME, STORAGE_TOKEN, STORAGE_USER_DATA } from '../constants/storage.constants';
 import { LocalStorageService } from './local-storage.service';
 import { ILoginRes } from '../interfaces/login.interfaces';
 import { User } from '../redux/interfaces/auth.interface';
@@ -33,6 +33,14 @@ export class AuthService {
 
   getUserData() {
     return this.storageService.getItem<User>(STORAGE_USER_DATA);
+  }  
+
+  setRememberMe(token: string) {
+    this.storageService.setItem(STORAGE_REMEMBER_ME, token);
+  }
+
+  getRememberMe() {
+    return this.storageService.getItem<string>(STORAGE_REMEMBER_ME);
   }  
 
   isLoggedIn(): boolean {

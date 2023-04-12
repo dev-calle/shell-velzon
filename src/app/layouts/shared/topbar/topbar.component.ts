@@ -7,10 +7,11 @@ import { LanguageService } from '../../../services/language.service';
 import { EventService } from '../../../services/event.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { Router } from '@angular/router';
-import { AuthState } from 'src/app/redux/interfaces/auth.interface';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
 import { logout } from 'src/app/redux/actions/auth.action';
+import { STORAGE_REMEMBER_ME } from 'src/app/constants/storage.constants';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-topbar',
@@ -56,6 +57,7 @@ export class TopbarComponent implements OnInit {
     public languageService: LanguageService,
     private  eventService: EventService,
     private _storageService: LocalStorageService,
+    private _authServive: AuthService,
     private _router: Router,
     private _store: Store<AppState>
   ) { }
@@ -217,7 +219,13 @@ export class TopbarComponent implements OnInit {
   }
 
   logout() {
+    const rememberMe = this._authServive.getRememberMe();
+    const user = this._authServive.getUserData();
     this._storageService.clear();
+    if(rememberMe && user) {
+      this._authServive.setUserData(user);
+      this._authServive.setRememberMe(rememberMe);
+    }
     this._store.dispatch(logout());
     this._router.navigate(['/auth']);
   }

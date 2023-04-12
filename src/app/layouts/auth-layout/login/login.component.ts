@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit(): void {
-
+    this.loadDataRemember();
   }
 
   get f() { return this.loginForm.controls; }
@@ -50,8 +50,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.submitted = false;
     this.login$ = this._authService.login(this.buildLoginForm()).subscribe(resp => {
       const { token, data: user } = resp;
+      const rememberMe = this.f['rememberMe'].value;
       this._authService.setToken(token);
-      this,this._authService.setUserData(user);
+      this._authService.setUserData(user);
+      this._authService.setRememberMe(rememberMe);
       this._store.dispatch(loginSuccess({ token, user }));
       this._router.navigate(['/segurity']);
     });
@@ -66,6 +68,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;
+  }
+
+  loadDataRemember() {
+    const email = this._authService.getUserData()?.contenido;
+    const rememberMe = this._authService.getRememberMe();
+    this.f['email'].setValue(email);
+    this.f['rememberMe'].setValue(rememberMe);
   }
 
   ngOnDestroy(): void {
