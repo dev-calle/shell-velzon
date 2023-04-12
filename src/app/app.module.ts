@@ -18,6 +18,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { InterceptorService } from './services/interceptor.service';
 import { StoreModule } from '@ngrx/store';
 import { appReducer } from './app.state';
+import { InterceptorError } from './services/interceptor-error.service';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -54,6 +55,11 @@ export function createTranslateLoader(http: HttpClient): any {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorError,
       multi: true
     }
   ],

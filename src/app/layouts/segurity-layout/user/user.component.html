@@ -75,7 +75,7 @@
                     <label for="lastname" class="form-label">Apellido</label>
                 </div>
                 <div class="col-lg-9">
-                    <input type="url" class="form-control" id="lastname" placeholder="Ingrese apellido" formControlName="lastname"
+                    <input type="text" class="form-control" id="lastname" placeholder="Ingrese apellido" formControlName="lastname"
                         [class.is-invalid]="fModal['lastname'].invalid && fModal['lastname'].touched">
                 </div>
             </div>
@@ -84,9 +84,8 @@
                     <label for="content" class="form-label">Contenido</label>
                 </div>
                 <div class="col-lg-9">
-                    <textarea class="form-control" id="content" rows="3" 
-                        placeholder="Ingrese contenido" formControlName="content" 
-                        [class.is-invalid]="fModal['content'].invalid && fModal['content'].touched"></textarea>
+                    <input type="email" class="form-control" id="content" placeholder="Ingrese contenido" formControlName="content"
+                    [class.is-invalid]="fModal['content'].invalid && fModal['content'].touched">
                 </div>
             </div>
             <div class="row mb-3">

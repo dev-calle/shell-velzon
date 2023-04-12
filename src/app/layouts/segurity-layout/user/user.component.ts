@@ -58,7 +58,7 @@ export class UserComponent implements OnInit, OnDestroy {
       code: [null, [Validators.required]],
       name: [null, [Validators.required]],
       lastname: [null, [Validators.required]],
-      content: [null, [Validators.required]],
+      content: [null, [Validators.required, Validators.email]],
       roles: [[], [Validators.required, nonEmptyArrayValidator]]
     })
   }
