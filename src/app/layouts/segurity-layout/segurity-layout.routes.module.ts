@@ -4,6 +4,7 @@ import { UserComponent } from './user/user.component';
 import { RoleComponent } from './role/role.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { NotFoundPageComponent } from '../../pages/not-found-page/not-found-page.component';
+import { MenuComponent } from './menu/menu.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfilePageComponent
+  },
+  {
+    path: 'menu',
+    component: MenuComponent
   },
   {
     path: '**',

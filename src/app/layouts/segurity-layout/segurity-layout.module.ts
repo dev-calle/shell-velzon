@@ -23,13 +23,15 @@ import { RouterModule } from '@angular/router';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
   declarations: [
     SegurityLayoutComponent,
     UserComponent,
     RoleComponent,
-    ProfilePageComponent
+    ProfilePageComponent,
+    MenuComponent
   ],
   imports: [
     CommonModule,

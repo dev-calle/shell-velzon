@@ -1,0 +1,135 @@
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0 flex-grow-1">Lista de menú</h4>
+            <button class="btn btn-primary d-flex gap-1" (click)="onAddMenu(content)">
+                <i class="ri-user-add-fill"></i> Agregar menú
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <form class="app-search d-none d-md-block" [formGroup]="formSearch">
+            <div class="position-relative">
+                <input type="text" class="form-control" placeholder="Buscar menú" autocomplete="off"
+                    formControlName="filter">
+                <span class="mdi mdi-magnify search-widget-icon"></span>
+                <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"></span>
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Código</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Url</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Editar</th>
+                        <th scope="col">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let role of menus">
+                        <th scope="row">{{ role.codigo }}</th>
+                        <td>{{ role.nombre }}</td>
+                        <td>{{ role.url }}</td>
+                        <td><span class="badge bg-success">{{ role.estado }}</span></td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm" (click)="onEditMenu(role.idmenu, content)">
+                                <i class="ri-pencil-fill"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" (click)="onDeleteMenu(role.idmenu, role.nombre)">
+                                <i class="ri-delete-bin-fill"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <app-pagination [totalPages]="totalPages" [currentPage]="currentPage"
+            (pageChanged)="onPageChanged($event)"></app-pagination>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="userModalLabel">Agregar Menú</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="modal.close()"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="formAddMenu">
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="code" class="form-label">Código</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" id="code" placeholder="Ingrese código" formControlName="code"
+                        [class.is-invalid]="fModal['code'].invalid && fModal['code'].touched"
+                        [attr.disabled]="option === 'EDIT' ? true: null">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="name" class="form-label">Nombre</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" id="name" placeholder="Ingrese nombre" formControlName="name"
+                        [class.is-invalid]="fModal['name'].invalid && fModal['name'].touched">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="name" class="form-label">Orden</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="number" class="form-control" id="order" placeholder="Ingrese orden" formControlName="order"
+                        [class.is-invalid]="fModal['order'].invalid && fModal['order'].touched">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="name" class="form-label">Tipo</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="number" class="form-control" id="type" placeholder="Ingrese tipo" formControlName="type"
+                        [class.is-invalid]="fModal['type'].invalid && fModal['type'].touched">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="name" class="form-label">Plataforma</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="number" class="form-control" id="platform" placeholder="Ingrese plataforma" formControlName="platform"
+                        [class.is-invalid]="fModal['platform'].invalid && fModal['platform'].touched">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="name" class="form-label">Módulo</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="number" class="form-control" id="module" placeholder="Ingrese módulo" formControlName="module"
+                        [class.is-invalid]="fModal['module'].invalid && fModal['module'].touched">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="name" class="form-label">Url</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" id="name" placeholder="Ingrese url" formControlName="url"
+                        [class.is-invalid]="fModal['url'].invalid && fModal['url'].touched">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="modal.close()">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="onSubmitMenu()">Guardar</button>
+    </div>
+</ng-template>
