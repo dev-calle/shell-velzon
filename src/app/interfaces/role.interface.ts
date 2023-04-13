@@ -1,7 +1,10 @@
+import { Menu } from "./menu.interface";
+
 export interface Role {
     idrol: string
     codigo: string
     nombre: string
     fechacreacion: string
-    estado: number
+    estado: number,
+    menus?: Menu[];
 }

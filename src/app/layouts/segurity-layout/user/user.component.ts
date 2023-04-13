@@ -25,7 +25,6 @@ export class UserComponent implements OnInit, OnDestroy {
   roles = [
     { id: '331e62a6-1980-499c-ac15-2a4042327e9c', name: 'Admin' }
   ];
-  selectedValues: string[] = [];
   formAddUser!: FormGroup;
   addUser$?: Subscription;
   modalRef!: NgbModalRef;
