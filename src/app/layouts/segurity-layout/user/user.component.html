@@ -21,13 +21,12 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">Código</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Apellido</th>
-                        <th scope="col">Contenido</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Editar</th>
-                        <th scope="col">Eliminar</th>
+                        <th scope="col" *ngFor="let column of columns" (click)="onOrderColumn(column)">
+                            <span class="d-flex align-items-center gap-1" [ngClass]="{ 'column-order': column.order }">
+                                {{ column.text }}
+                                <i class="ri-arrow-up-s-fill" *ngIf="column.active && column.order"></i>
+                            </span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,7 +42,8 @@
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger btn-sm" (click)="onDeleteUser(user.idusuario, user.nombre, user.apellido)">
+                            <button class="btn btn-danger btn-sm"
+                                (click)="onDeleteUser(user.idusuario, user.nombre, user.apellido)">
                                 <i class="ri-delete-bin-fill"></i>
                             </button>
                         </td>
@@ -69,8 +69,8 @@
                     <label for="code" class="form-label">Código</label>
                 </div>
                 <div class="col-lg-9">
-                    <input type="text" class="form-control" id="code" placeholder="Ingrese código" formControlName="code"
-                        [class.is-invalid]="fModal['code'].invalid && fModal['code'].touched"
+                    <input type="text" class="form-control" id="code" placeholder="Ingrese código"
+                        formControlName="code" [class.is-invalid]="fModal['code'].invalid && fModal['code'].touched"
                         [attr.disabled]="option === 'EDIT' ? true: null">
                 </div>
             </div>
@@ -79,8 +79,8 @@
                     <label for="name" class="form-label">Nombre</label>
                 </div>
                 <div class="col-lg-9">
-                    <input type="text" class="form-control" id="name" placeholder="Ingrese nombre" formControlName="name"
-                        [class.is-invalid]="fModal['name'].invalid && fModal['name'].touched">
+                    <input type="text" class="form-control" id="name" placeholder="Ingrese nombre"
+                        formControlName="name" [class.is-invalid]="fModal['name'].invalid && fModal['name'].touched">
                 </div>
             </div>
             <div class="row mb-3">
@@ -88,7 +88,8 @@
                     <label for="lastname" class="form-label">Apellido</label>
                 </div>
                 <div class="col-lg-9">
-                    <input type="text" class="form-control" id="lastname" placeholder="Ingrese apellido" formControlName="lastname"
+                    <input type="text" class="form-control" id="lastname" placeholder="Ingrese apellido"
+                        formControlName="lastname"
                         [class.is-invalid]="fModal['lastname'].invalid && fModal['lastname'].touched">
                 </div>
             </div>
@@ -97,8 +98,9 @@
                     <label for="content" class="form-label">Contenido</label>
                 </div>
                 <div class="col-lg-9">
-                    <input type="email" class="form-control" id="content" placeholder="Ingrese contenido" formControlName="content"
-                    [class.is-invalid]="fModal['content'].invalid && fModal['content'].touched">
+                    <input type="email" class="form-control" id="content" placeholder="Ingrese contenido"
+                        formControlName="content"
+                        [class.is-invalid]="fModal['content'].invalid && fModal['content'].touched">
                 </div>
             </div>
             <div class="row mb-3">
@@ -106,10 +108,9 @@
                     <label for="leaveemails" class="form-label">Roles</label>
                 </div>
                 <div class="col-lg-9">
-                    <ng-select [items]="roles" [multiple]="true" formControlName="roles"
-                        bindLabel="name" bindValue="id" placeholder="Agregue roles"
-                        [class.is-invalid]="fModal['roles'].invalid && fModal['roles'].touched" 
-                        >
+                    <ng-select [items]="roles" [multiple]="true" formControlName="roles" bindLabel="name" bindValue="id"
+                        placeholder="Agregue roles"
+                        [class.is-invalid]="fModal['roles'].invalid && fModal['roles'].touched">
                     </ng-select>
                 </div>
             </div>

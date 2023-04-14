@@ -7,6 +7,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { nonEmptyArrayValidator } from 'src/app/utils';
 import { OPTION } from 'src/app/constants/option.constants';
 import { AlertService } from 'src/app/services/alert.service';
+import { ColumnOrder } from 'src/app/interfaces/column-order.interface';
 
 @Component({
   selector: 'app-user',
@@ -31,6 +32,16 @@ export class UserComponent implements OnInit, OnDestroy {
 
   currentIdUser = '';
   option = OPTION.ADD;
+
+  columns: ColumnOrder[] = [
+    { name: 'codigo', text: 'Código', active: false, order: true },
+    { name: 'nombre', text: 'Nombre', active: false, order: true },
+    { name: 'apellido', text: 'Apellido', active: false, order: true },
+    { name: 'contenido', text: 'Contenido', active: false, order: true },
+    { name: 'estado', text: 'Estado', active: false, order: true },
+    { name: 'editar', text: 'Editar', active: false, order: false },
+    { name: 'eliminar', text: 'Eliminar', active: false, order: false }
+  ];
 
   private searchSubject = new Subject<string>();
 
@@ -71,16 +82,21 @@ export class UserComponent implements OnInit, OnDestroy {
   onListUsers() {
     const limit = this.itemsPerPage.toString();
     const page = this.currentPage.toString();
-    this.users$ = this._userService.getUsers(limit, page, '').subscribe(resp => {
+    this.listUsers(limit, page, '', '');
+  }
+
+  listUsers(limit: string, page: string, filter: string, order: string) {
+    this.users$ = this._userService.getUsers(limit, page, filter, order).subscribe(resp => {
       this.users = resp.data;
       this.total = resp.total;
-    });
+    }); 
   }
 
   onSearchFilter() {
     this.searchSubject.pipe(debounceTime(1000))
       .subscribe((value) => {
         if (value && value.length > 0) {
+          this.removeColumnsOrder();
           this.search(value);
         } else {
           this.onListUsers();
@@ -93,10 +109,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   search(value: string) {
-    this.users$ = this._userService.getUsers('', '', value).subscribe(resp => {
-      this.users = resp.data;
-      this.total = resp.total;
-    });
+    this.listUsers('', '', value, '');
   }
 
   get totalPages(): number {
@@ -191,6 +204,19 @@ export class UserComponent implements OnInit, OnDestroy {
       });
       this.onListUsers();
     })
+  }
+
+  onOrderColumn(column: ColumnOrder) {
+    if(!column.order) return;
+    this.removeColumnsOrder();
+    column.active = true;
+    const limit = this.itemsPerPage.toString();
+    const page = this.currentPage.toString();
+    this.listUsers(limit, page, '', column.name);
+  }
+
+  removeColumnsOrder() {
+    this.columns.forEach(column => column.active = false);
   }
 
   ngOnDestroy(): void {
