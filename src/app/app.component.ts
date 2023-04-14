@@ -4,6 +4,7 @@ import { AuthService } from './services/auth.service';
 import { AuthState } from './redux/interfaces/auth.interface';
 import { Store } from '@ngrx/store';
 import { loginSuccess } from './redux/actions/auth.action';
+import { ChangeDetectorRef, AfterContentChecked} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,8 @@ export class AppComponent implements OnInit {
   constructor(
     private _loaderService: LoaderService, 
     private _authService: AuthService,
-    private _store: Store<AuthState>
+    private _store: Store<AuthState>,
+    private _cdref: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -37,5 +39,9 @@ export class AppComponent implements OnInit {
 
   hideLoader() {
     this._loaderService.hide();
+  }
+
+  ngAfterContentChecked() {
+    this._cdref.detectChanges();
   }
 }
