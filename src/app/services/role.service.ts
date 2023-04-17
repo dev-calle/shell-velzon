@@ -14,11 +14,12 @@ export class RoleService {
 
     constructor(private _http: HttpClient) { }
 
-    getRoles(limit: string, page: string, filter: string) {
+    getRoles(limit: string, page: string, filter: string, order: string) {
         let params = new HttpParams();
         params = params.set('limit', limit);
         params = params.set('page', page);
         params = params.set('filter', filter);
+        params = params.set('order', order);
         return this._http.get<IRoleRes>(`${URI}/role`, { params });
     }
 

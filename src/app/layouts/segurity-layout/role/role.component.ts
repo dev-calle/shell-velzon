@@ -7,6 +7,7 @@ import { OPTION } from 'src/app/constants/option.constants';
 import { AlertService } from 'src/app/services/alert.service';
 import { RoleService } from 'src/app/services/role.service';
 import { Role } from 'src/app/interfaces/role.interface';
+import { ColumnOrder } from 'src/app/interfaces/column-order.interface';
 
 @Component({
   selector: 'app-role',
@@ -31,6 +32,14 @@ export class RoleComponent implements OnInit, OnDestroy {
 
   currentIdRole = '';
   option = OPTION.ADD;
+
+  columns: ColumnOrder[] = [
+    { name: 'codigo', text: 'Código', active: false, order: true },
+    { name: 'nombre', text: 'Nombre', active: false, order: true },
+    { name: 'estado', text: 'Estado', active: false, order: true },
+    { name: 'editar', text: 'Editar', active: false, order: false },
+    { name: 'eliminar', text: 'Eliminar', active: false, order: false }
+  ];
 
   private searchSubject = new Subject<string>();
 
@@ -69,7 +78,11 @@ export class RoleComponent implements OnInit, OnDestroy {
   onListroles() {
     const limit = this.itemsPerPage.toString();
     const page = this.currentPage.toString();
-    this.roles$ = this._roleService.getRoles(limit, page, '').subscribe(resp => {
+    this.listRoles(limit, page, '', '');
+  }
+
+  listRoles(limit: string, page: string, filter: string, order: string) {
+    this.roles$ = this._roleService.getRoles(limit, page, filter, order).subscribe(resp => {
       this.roles = resp.data;
       this.total = resp.total;
     });
@@ -91,10 +104,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   }
 
   search(value: string) {
-    this.roles$ = this._roleService.getRoles('', '', value).subscribe(resp => {
-      this.roles = resp.data;
-      this.total = resp.total;
-    });
+    this.listRoles('', '', value, '');
   }
 
   get totalPages(): number {
@@ -185,6 +195,19 @@ export class RoleComponent implements OnInit, OnDestroy {
       });
       this.onListroles();
     })
+  }
+
+  onOrderColumn(column: ColumnOrder) {
+    if(!column.order) return;
+    this.removeColumnsOrder();
+    column.active = true;
+    const limit = this.itemsPerPage.toString();
+    const page = this.currentPage.toString();
+    this.listRoles(limit, page, '', column.name);
+  }
+
+  removeColumnsOrder() {
+    this.columns.forEach(column => column.active = false);
   }
 
   ngOnDestroy(): void {
