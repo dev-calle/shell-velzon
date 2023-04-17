@@ -15,11 +15,12 @@ export class MenuService {
 
     constructor(private _http: HttpClient) { }
 
-    getMenus(limit: string, page: string, filter: string) {
+    getMenus(limit: string, page: string, filter: string, order: string) {
         let params = new HttpParams();
         params = params.set('limit', limit);
         params = params.set('page', page);
         params = params.set('filter', filter);
+        params = params.set('order', order);
         return this._http.get<IMenuRes>(`${URI}/menu`, { params });
     }
 

@@ -21,12 +21,12 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">Código</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Url</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Editar</th>
-                        <th scope="col">Eliminar</th>
+                        <th scope="col" *ngFor="let column of columns" (click)="onOrderColumn(column)">
+                            <span class="d-flex align-items-center gap-1" [ngClass]="{ 'column-order': column.order }">
+                                {{ column.text }}
+                                <i class="ri-arrow-up-s-fill" *ngIf="column.active && column.order"></i>
+                            </span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>

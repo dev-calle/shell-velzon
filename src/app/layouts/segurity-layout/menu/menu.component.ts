@@ -6,6 +6,7 @@ import { OPTION } from 'src/app/constants/option.constants';
 import { AlertService } from 'src/app/services/alert.service';
 import { MenuService } from 'src/app/services/menu.service';
 import { Menu } from 'src/app/interfaces/menu.interface';
+import { ColumnOrder } from 'src/app/interfaces/column-order.interface';
 
 @Component({
   selector: 'app-menu',
@@ -28,6 +29,15 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   currentIdMenu = '';
   option = OPTION.ADD;
+
+  columns: ColumnOrder[] = [
+    { name: 'codigo', text: 'Código', active: false, order: true },
+    { name: 'nombre', text: 'Nombre', active: false, order: true },
+    { name: 'url', text: 'Url', active: false, order: true },
+    { name: 'estado', text: 'Estado', active: false, order: true },
+    { name: 'editar', text: 'Editar', active: false, order: false },
+    { name: 'eliminar', text: 'Eliminar', active: false, order: false }
+  ];
 
   private searchSubject = new Subject<string>();
 
@@ -63,14 +73,18 @@ export class MenuComponent implements OnInit, OnDestroy {
       type: [null, [Validators.required]],
       platform: [null, [Validators.required]],
       module: [null, [Validators.required]],
-      url: [null, [Validators.required, Validators.pattern('^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})([/\\w .-]*)*/?$')]]
+      url: [null, [Validators.required]]
     })
   }
 
   onListMenus() {
     const limit = this.itemsPerPage.toString();
     const page = this.currentPage.toString();
-    this.menus$ = this._menuService.getMenus(limit, page, '').subscribe(resp => {
+    this.listMenus(limit, page, '', '');
+  }
+
+  listMenus(limit: string, page: string, filter: string, order: string) {
+    this.menus$ = this._menuService.getMenus(limit, page, filter, order).subscribe(resp => {
       this.menus = resp.data;
       this.total = resp.total;
     });
@@ -92,10 +106,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   search(value: string) {
-    this.menus$ = this._menuService.getMenus('', '', value).subscribe(resp => {
-      this.menus = resp.data;
-      this.total = resp.total;
-    });
+    this.listMenus('', '', value, '');
   }
 
   get totalPages(): number {
@@ -193,6 +204,19 @@ export class MenuComponent implements OnInit, OnDestroy {
       });
       this.onListMenus();
     })
+  }
+
+  onOrderColumn(column: ColumnOrder) {
+    if(!column.order) return;
+    this.removeColumnsOrder();
+    column.active = true;
+    const limit = this.itemsPerPage.toString();
+    const page = this.currentPage.toString();
+    this.listMenus(limit, page, '', column.name);
+  }
+
+  removeColumnsOrder() {
+    this.columns.forEach(column => column.active = false);
   }
 
   ngOnDestroy(): void {
