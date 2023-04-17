@@ -8,6 +8,7 @@ import { AlertService } from 'src/app/services/alert.service';
 import { RoleService } from 'src/app/services/role.service';
 import { Role } from 'src/app/interfaces/role.interface';
 import { ColumnOrder } from 'src/app/interfaces/column-order.interface';
+import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
   selector: 'app-role',
@@ -23,9 +24,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   roles$?: Subscription;
   roles: Role[] = [];
 
-  menus = [
-    { id: '3e4196db-0863-4c78-b3fb-bab480ded1de', name: 'Factors' }
-  ];
+  menus = [];
   formAddRole!: FormGroup;
   addRole$?: Subscription;
   modalRef!: NgbModalRef;
@@ -47,7 +46,8 @@ export class RoleComponent implements OnInit, OnDestroy {
     private _roleService: RoleService,
     private _fb: FormBuilder,
     public _modalService: NgbModal,
-    private _alertService: AlertService
+    private _alertService: AlertService,
+    private _menuService: MenuService
   ) { }
 
   ngOnInit(): void {
@@ -55,6 +55,7 @@ export class RoleComponent implements OnInit, OnDestroy {
     this.createformAddRole();
     this.onSearchFilter();
     this.onListroles();
+    this.listMenus();
   }
 
   get f() { return this.formSearch.controls; }
@@ -216,6 +217,12 @@ export class RoleComponent implements OnInit, OnDestroy {
 
   getColumNameActive() {
     return this.columns.find(column => column.active && column.order)?.name ?? '';
+  }
+
+  listMenus() {
+    this.roles$ = this._menuService.getMenus('100', '1', '', '').subscribe(resp => {
+      this.menus = resp.data.map(r => { return { id: r.idmenu, name: r.nombre } }) as [];
+    });
   }
 
   ngOnDestroy(): void {

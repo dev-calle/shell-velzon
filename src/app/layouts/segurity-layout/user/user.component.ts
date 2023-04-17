@@ -8,6 +8,7 @@ import { nonEmptyArrayValidator } from 'src/app/utils';
 import { OPTION } from 'src/app/constants/option.constants';
 import { AlertService } from 'src/app/services/alert.service';
 import { ColumnOrder } from 'src/app/interfaces/column-order.interface';
+import { RoleService } from 'src/app/services/role.service';
 
 @Component({
   selector: 'app-user',
@@ -21,11 +22,10 @@ export class UserComponent implements OnInit, OnDestroy {
   itemsPerPage = 5;
   total = 0;
   users$?: Subscription;
+  roles$?: Subscription;
   users: User[] = [];
 
-  roles = [
-    { id: '331e62a6-1980-499c-ac15-2a4042327e9c', name: 'Admin' }
-  ];
+  roles = [];
   formAddUser!: FormGroup;
   addUser$?: Subscription;
   modalRef!: NgbModalRef;
@@ -49,7 +49,8 @@ export class UserComponent implements OnInit, OnDestroy {
     private _userService: UserService,
     private _fb: FormBuilder,
     public _modalService: NgbModal,
-    private _alertService: AlertService
+    private _alertService: AlertService,
+    private _roleService: RoleService
   ) { }
 
   ngOnInit(): void {
@@ -57,6 +58,7 @@ export class UserComponent implements OnInit, OnDestroy {
     this.createFormAddUser();
     this.onSearchFilter();
     this.onListUsers();
+    this.listRoles();
   }
 
   get f() { return this.formSearch.controls; }
@@ -227,8 +229,15 @@ export class UserComponent implements OnInit, OnDestroy {
     return this.columns.find(column => column.active && column.order)?.name ?? '';
   }
 
+  listRoles() {
+    this.roles$ = this._roleService.getRoles('100', '1', '', '').subscribe(resp => {
+      this.roles = resp.data.map(r => { return { id: r.idrol, name: r.nombre } }) as [];
+    });
+  }
+
   ngOnDestroy(): void {
     this.users$?.unsubscribe();
     this.addUser$?.unsubscribe();
+    this.roles$?.unsubscribe();
   }
 }
