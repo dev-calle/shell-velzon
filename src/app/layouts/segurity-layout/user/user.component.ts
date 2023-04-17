@@ -82,7 +82,7 @@ export class UserComponent implements OnInit, OnDestroy {
   onListUsers() {
     const limit = this.itemsPerPage.toString();
     const page = this.currentPage.toString();
-    this.listUsers(limit, page, '', '');
+    this.listUsers(limit, page, '', this.getColumNameActive());
   }
 
   listUsers(limit: string, page: string, filter: string, order: string) {
@@ -208,15 +208,23 @@ export class UserComponent implements OnInit, OnDestroy {
 
   onOrderColumn(column: ColumnOrder) {
     if(!column.order) return;
-    this.removeColumnsOrder();
-    column.active = true;
+    if(this.columns.some(col => col.active && col.name === column.name)) {
+      column.active = false;
+    } else {
+      this.removeColumnsOrder();
+      column.active = true;
+    }    
     const limit = this.itemsPerPage.toString();
     const page = this.currentPage.toString();
-    this.listUsers(limit, page, '', column.name);
+    this.listUsers(limit, page, '', this.getColumNameActive());
   }
 
   removeColumnsOrder() {
     this.columns.forEach(column => column.active = false);
+  }  
+
+  getColumNameActive() {
+    return this.columns.find(column => column.active && column.order)?.name ?? '';
   }
 
   ngOnDestroy(): void {

@@ -78,7 +78,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   onListroles() {
     const limit = this.itemsPerPage.toString();
     const page = this.currentPage.toString();
-    this.listRoles(limit, page, '', '');
+    this.listRoles(limit, page, '', this.getColumNameActive());
   }
 
   listRoles(limit: string, page: string, filter: string, order: string) {
@@ -199,15 +199,23 @@ export class RoleComponent implements OnInit, OnDestroy {
 
   onOrderColumn(column: ColumnOrder) {
     if(!column.order) return;
-    this.removeColumnsOrder();
-    column.active = true;
+    if(this.columns.some(col => col.active && col.name === column.name)) {
+      column.active = false;
+    } else {
+      this.removeColumnsOrder();
+      column.active = true;
+    } 
     const limit = this.itemsPerPage.toString();
     const page = this.currentPage.toString();
-    this.listRoles(limit, page, '', column.name);
+    this.listRoles(limit, page, '', this.getColumNameActive());
   }
 
   removeColumnsOrder() {
     this.columns.forEach(column => column.active = false);
+  }
+
+  getColumNameActive() {
+    return this.columns.find(column => column.active && column.order)?.name ?? '';
   }
 
   ngOnDestroy(): void {
