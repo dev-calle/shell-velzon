@@ -3,59 +3,61 @@ import { MenuItem } from '../../../interfaces/sidebar.interfaces';
 export const MENU: MenuItem[] = [
   {
     id: 1,
-    label: 'MENUITEMS.MENU.TEXT',
+    label: 'Menú',
     isTitle: true
   },
   {
     id: 2,
-    label: 'MENUITEMS.DASHBOARD.TEXT',
+    label: 'Administración',
     icon: ' ri-shield-user-fill',
     subItems: [
       {
         id: 3,
-        label: 'MENUITEMS.DASHBOARD.LIST.TABLEUSERS',
+        label: 'Usuarios',
         link: '/segurity/user',
         parentId: 2
       },
       {
         id: 4,
-        label: 'MENUITEMS.DASHBOARD.LIST.CRM',
-        link: '/crm',
+        label: 'Roles',
+        link: '/segurity/role',
         parentId: 2
       },
       {
         id: 5,
-        label: 'MENUITEMS.DASHBOARD.LIST.ECOMMERCE',
-        link: '',
+        label: 'Menús',
+        link: '/segurity/menu',
         parentId: 2
       },
       {
         id: 6,
-        label: 'MENUITEMS.DASHBOARD.LIST.CRYPTO',
-        link: '/crypto',
+        label: 'Actividades',
+        link: '/segurity/acivity',
         parentId: 2
       },
       {
         id: 7,
-        label: 'MENUITEMS.DASHBOARD.LIST.PROJECTS',
-        link: '/projects',
+        label: 'Proyectos',
+        link: '/segurity/project',
         parentId: 2
       },
       {
         id: 7,
-        label: 'MENUITEMS.DASHBOARD.LIST.NFT',
-        link: '/nft',
-        parentId: 2,
+        label: 'Timesheet',
+        link: '/segurity/timesheet',
+        parentId: 2
       },
       {
         id: 8,
-        label: 'MENUITEMS.DASHBOARD.LIST.JOB',
-        link: '/job',
-        badge: {
-          variant: 'bg-success',
-          text: 'MENUITEMS.DASHBOARD.BADGE',
-        },
-        parentId: 2,
+        label: 'Catálogo de estodos',
+        link: '/segurity/state-catalog',
+        parentId: 2
+      },
+      {
+        id: 9,
+        label: 'Nomenclaturas',
+        link: '/segurity/nomenclature',
+        parentId: 2
       }
     ]
   },
