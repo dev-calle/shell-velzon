@@ -32,7 +32,7 @@ export const MENU: MenuItem[] = [
       {
         id: 6,
         label: 'Actividades',
-        link: '/segurity/acivity',
+        link: '/segurity/activity',
         parentId: 2
       },
       {
@@ -49,7 +49,7 @@ export const MENU: MenuItem[] = [
       },
       {
         id: 8,
-        label: 'Catálogo de estodos',
+        label: 'Catálogo de estados',
         link: '/segurity/state-catalog',
         parentId: 2
       },

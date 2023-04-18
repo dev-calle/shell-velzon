@@ -24,6 +24,8 @@ import { RouterModule } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { MenuComponent } from './menu/menu.component';
+import { ActivityComponent } from './activity/activity.component';
+import { EstadoPipe } from 'src/app/pipes/estado.pipe';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { MenuComponent } from './menu/menu.component';
     UserComponent,
     RoleComponent,
     ProfilePageComponent,
-    MenuComponent
+    MenuComponent,
+    ActivityComponent,
+    EstadoPipe
   ],
   imports: [
     CommonModule,

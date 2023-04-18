@@ -5,6 +5,7 @@ import { RoleComponent } from './role/role.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { NotFoundPageComponent } from '../../pages/not-found-page/not-found-page.component';
 import { MenuComponent } from './menu/menu.component';
+import { ActivityComponent } from './activity/activity.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: 'menu',
     component: MenuComponent
+  },
+  {
+    path: 'activity',
+    component: ActivityComponent
   },
   {
     path: '**',
