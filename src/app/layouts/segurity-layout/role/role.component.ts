@@ -54,7 +54,7 @@ export class RoleComponent implements OnInit, OnDestroy {
     this.createForm();
     this.createformAddRole();
     this.onSearchFilter();
-    this.onListroles();
+    this.onListRoles();
     this.listMenus();
   }
 
@@ -76,7 +76,7 @@ export class RoleComponent implements OnInit, OnDestroy {
     })
   }
 
-  onListroles() {
+  onListRoles() {
     const limit = this.itemsPerPage.toString();
     const page = this.currentPage.toString();
     this.listRoles(limit, page, '', this.getColumNameActive());
@@ -95,7 +95,7 @@ export class RoleComponent implements OnInit, OnDestroy {
         if (value && value.length > 0) {
           this.search(value);
         } else {
-          this.onListroles();
+          this.onListRoles();
         }
       });
 
@@ -114,7 +114,7 @@ export class RoleComponent implements OnInit, OnDestroy {
 
   onPageChanged(page: number): void {
     this.currentPage = page;
-    this.onListroles();
+    this.onListRoles();
   }
 
   open(content: TemplateRef<any>) {
@@ -135,7 +135,7 @@ export class RoleComponent implements OnInit, OnDestroy {
       this._roleService.editRole(this.currentIdRole, this.buildformAddRole());
     this.addRole$ = service$.subscribe(() => {
       this.formAddRole.reset();
-      this.onListroles();
+      this.onListRoles();
       this.modalRef.close();
       this.currentIdRole = '';
       this.option = OPTION.ADD;
@@ -194,7 +194,7 @@ export class RoleComponent implements OnInit, OnDestroy {
         icon: 'success', 
         confirmButtonText: 'Aceptar' 
       });
-      this.onListroles();
+      this.onListRoles();
     })
   }
 

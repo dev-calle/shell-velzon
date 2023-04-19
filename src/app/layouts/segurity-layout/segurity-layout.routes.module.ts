@@ -6,6 +6,7 @@ import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { NotFoundPageComponent } from '../../pages/not-found-page/not-found-page.component';
 import { MenuComponent } from './menu/menu.component';
 import { ActivityComponent } from './activity/activity.component';
+import { ProjectComponent } from './project/project.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,10 @@ const routes: Routes = [
   {
     path: 'activity',
     component: ActivityComponent
+  },
+  {
+    path: 'project',
+    component: ProjectComponent
   },
   {
     path: '**',

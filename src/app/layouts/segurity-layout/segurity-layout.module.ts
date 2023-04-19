@@ -26,6 +26,7 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { MenuComponent } from './menu/menu.component';
 import { ActivityComponent } from './activity/activity.component';
 import { EstadoPipe } from 'src/app/pipes/estado.pipe';
+import { ProjectComponent } from './project/project.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { EstadoPipe } from 'src/app/pipes/estado.pipe';
     ProfilePageComponent,
     MenuComponent,
     ActivityComponent,
+    ProjectComponent,
     EstadoPipe
   ],
   imports: [
