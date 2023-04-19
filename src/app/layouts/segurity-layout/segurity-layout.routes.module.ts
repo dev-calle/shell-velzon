@@ -7,6 +7,7 @@ import { NotFoundPageComponent } from '../../pages/not-found-page/not-found-page
 import { MenuComponent } from './menu/menu.component';
 import { ActivityComponent } from './activity/activity.component';
 import { ProjectComponent } from './project/project.component';
+import { TimesheetComponent } from './timesheet/timesheet.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,10 @@ const routes: Routes = [
   {
     path: 'project',
     component: ProjectComponent
+  },
+  {
+    path: 'timesheet',
+    component: TimesheetComponent
   },
   {
     path: '**',

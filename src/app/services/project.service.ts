@@ -19,22 +19,22 @@ export class ProjectService {
         params = params.set('page', page);
         params = params.set('filter', filter);
         params = params.set('order', order);
-        return this._http.get<IProjectRes>(`${URI}/Project`, { params });
+        return this._http.get<IProjectRes>(`${URI}/project`, { params });
     }
 
     addProject(body: any) {
-        return this._http.post<any>(`${URI}/Project`, body);
+        return this._http.post<any>(`${URI}/project`, body);
     }
 
     getProject(id: string) {
-        return this._http.get<IItemProjectRes>(`${URI}/Project/${id}`);
+        return this._http.get<IItemProjectRes>(`${URI}/project/${id}`);
     }
 
     editProject(id: string, body: any) {
-        return this._http.patch<any>(`${URI}/Project/${id}`, body);
+        return this._http.patch<any>(`${URI}/project/${id}`, body);
     }
 
     deleteProject(id: string) {
-        return this._http.delete<any>(`${URI}/Project/${id}`);
+        return this._http.delete<any>(`${URI}/project/${id}`);
     }
 }

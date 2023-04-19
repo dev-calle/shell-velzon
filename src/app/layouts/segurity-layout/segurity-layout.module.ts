@@ -27,6 +27,7 @@ import { MenuComponent } from './menu/menu.component';
 import { ActivityComponent } from './activity/activity.component';
 import { EstadoPipe } from 'src/app/pipes/estado.pipe';
 import { ProjectComponent } from './project/project.component';
+import { TimesheetComponent } from './timesheet/timesheet.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { ProjectComponent } from './project/project.component';
     MenuComponent,
     ActivityComponent,
     ProjectComponent,
+    TimesheetComponent,
     EstadoPipe
   ],
   imports: [

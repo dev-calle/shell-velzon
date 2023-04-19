@@ -30,18 +30,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let role of menus">
-                        <th scope="row">{{ role.codigo }}</th>
-                        <td>{{ role.nombre }}</td>
-                        <td>{{ role.url }}</td>
-                        <td><span class="badge bg-success">{{ role.estado }}</span></td>
+                    <tr *ngFor="let menu of menus">
+                        <th scope="row">{{ menu.codigo }}</th>
+                        <td>{{ menu.nombre }}</td>
+                        <td>{{ menu.url }}</td>
+                        <td><span class="badge bg-success">{{ menu.estado }}</span></td>
                         <td>
-                            <button class="btn btn-secondary btn-sm" (click)="onEditMenu(role.idmenu, content)">
+                            <button class="btn btn-secondary btn-sm" (click)="onEditMenu(menu.idmenu, content)">
                                 <i class="ri-pencil-fill"></i>
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger btn-sm" (click)="onDeleteMenu(role.idmenu, role.nombre)">
+                            <button class="btn btn-danger btn-sm" (click)="onDeleteMenu(menu.idmenu, menu.nombre)">
                                 <i class="ri-delete-bin-fill"></i>
                             </button>
                         </td>

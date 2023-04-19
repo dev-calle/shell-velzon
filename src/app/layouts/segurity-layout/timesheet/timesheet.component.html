@@ -1,0 +1,154 @@
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0 flex-grow-1">Lista de timesheet</h4>
+            <button class="btn btn-primary d-flex gap-1" (click)="onAddTimesheet(content)">
+                <i class="ri-user-add-fill"></i> Agregar timesheet
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <form class="app-search d-none d-md-block" [formGroup]="formSearch">
+            <div class="position-relative">
+                <input type="text" class="form-control" placeholder="Buscar menú" autocomplete="off"
+                    formControlName="filter">
+                <span class="mdi mdi-magnify search-widget-icon"></span>
+                <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"></span>
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col" *ngFor="let column of columns" (click)="onOrderColumn(column)">
+                            <span class="d-flex align-items-center gap-1" [ngClass]="{ 'column-order': column.order }">
+                                {{ column.text }}
+                                <i class="ri-arrow-up-s-fill" *ngIf="column.active && column.order"></i>
+                            </span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let timesheet of timesheets">
+                        <th scope="row">{{ timesheet.codigo }}</th>
+                        <td>{{ timesheet.fecha | date: 'dd/MM/YYYY HH:mm a' }}</td>
+                        <td>{{ timesheet.hora }}</td>
+                        <td>{{ timesheet.observacion }}</td>
+                        <td><span class="badge bg-success">{{ timesheet.estado }}</span></td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm"
+                                (click)="onEditMenu(timesheet.idtimesheet, content)">
+                                <i class="ri-pencil-fill"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm"
+                                (click)="onDeleteTimesheet(timesheet.idtimesheet, timesheet.codigo)">
+                                <i class="ri-delete-bin-fill"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <app-pagination [totalPages]="totalPages" [currentPage]="currentPage"
+            (pageChanged)="onPageChanged($event)"></app-pagination>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="userModalLabel">Agregar Timesheet</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="modal.close()"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="formAddMenu">
+            <div class="row mb-3" *ngIf="option !== 'ADD'">
+                <div class="col-lg-3">
+                    <label for="code" class="form-label">Código</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" id="code" placeholder="Ingrese código"
+                        formControlName="code" [class.is-invalid]="fModal['code'].invalid && fModal['code'].touched"
+                        [attr.disabled]="option === 'EDIT' ? true: null">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="date" class="form-label">Fecha</label>
+                </div>
+                <div class="col-lg-5">
+                    <input type="date" class="form-control" id="date" placeholder="Ingrese fecha" formControlName="date"
+                        [class.is-invalid]="fModal['date'].invalid && fModal['date'].touched">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="hour" class="form-label">Hora</label>
+                </div>
+                <div class="col-lg-4">
+                    <input type="time" class="form-control" id="hour" placeholder="Ingrese hora" formControlName="hour"
+                        [class.is-invalid]="fModal['hour'].invalid && fModal['hour'].touched">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="hours" class="form-label">Horas</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="number" class="form-control" id="hours" placeholder="Ingrese horas"
+                        formControlName="hours" [class.is-invalid]="fModal['hours'].invalid && fModal['hours'].touched">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="observation" class="form-label">Observación</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" id="type" placeholder="Ingrese observación"
+                        formControlName="observation"
+                        [class.is-invalid]="fModal['observation'].invalid && fModal['observation'].touched">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="project" class="form-label">Proyecto</label>
+                </div>
+                <div class="col-lg-9">
+                    <ng-select [items]="projects" formControlName="project" bindLabel="name"
+                        bindValue="id" placeholder="Seleccione proyecto"
+                        [class.is-invalid]="fModal['project'].invalid && fModal['project'].touched">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="activity" class="form-label">Actividad</label>
+                </div>
+                <div class="col-lg-9">
+                    <ng-select [items]="activities" formControlName="activity" bindLabel="name"
+                        bindValue="id" placeholder="Seleccione actividad"
+                        [class.is-invalid]="fModal['activity'].invalid && fModal['activity'].touched">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="user" class="form-label">Usuario</label>
+                </div>
+                <div class="col-lg-9">
+                    <ng-select [items]="users" formControlName="user" bindLabel="name"
+                        bindValue="id" placeholder="Seleccione usuario"
+                        [class.is-invalid]="fModal['user'].invalid && fModal['user'].touched">
+                    </ng-select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="modal.close()">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="onSubmitTimesheet()">Guardar</button>
+    </div>
+</ng-template>
