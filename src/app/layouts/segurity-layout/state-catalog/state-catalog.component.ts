@@ -167,7 +167,7 @@ export class StateCatalogComponent implements OnInit, OnDestroy {
 
   onDeleteStateCatalog(id: string = '', name: string) {
     this._alertService.show({
-      title: `¿Eliminar proyecto ${name}?`,
+      title: `¿Eliminar estado ${name}?`,
       text: "¡No podrás revertir esto!",
       icon: 'warning',
       showCancelButton: true,
@@ -184,7 +184,7 @@ export class StateCatalogComponent implements OnInit, OnDestroy {
     return this._stateCatalogService.deleteStateCatalog(id).subscribe(() => {
       this._alertService.show({ 
         title: 'Eliminado', 
-        text: 'El proyecto ha sido eliminado', 
+        text: 'El estado ha sido eliminado', 
         icon: 'success', 
         confirmButtonText: 'Aceptar' 
       });

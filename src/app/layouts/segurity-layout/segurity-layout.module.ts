@@ -29,6 +29,7 @@ import { EstadoPipe } from 'src/app/pipes/estado.pipe';
 import { ProjectComponent } from './project/project.component';
 import { TimesheetComponent } from './timesheet/timesheet.component';
 import { StateCatalogComponent } from './state-catalog/state-catalog.component';
+import { NomenclatureComponent } from './nomenclature/nomenclature.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { StateCatalogComponent } from './state-catalog/state-catalog.component';
     ProjectComponent,
     TimesheetComponent,
     StateCatalogComponent,
+    NomenclatureComponent,
     EstadoPipe
   ],
   imports: [

@@ -9,6 +9,7 @@ import { ActivityComponent } from './activity/activity.component';
 import { ProjectComponent } from './project/project.component';
 import { TimesheetComponent } from './timesheet/timesheet.component';
 import { StateCatalogComponent } from './state-catalog/state-catalog.component';
+import { NomenclatureComponent } from './nomenclature/nomenclature.component';
 
 const routes: Routes = [
   {
@@ -47,6 +48,10 @@ const routes: Routes = [
   {
     path: 'state-catalog',
     component: StateCatalogComponent
+  },
+  {
+    path: 'nomenclature',
+    component: NomenclatureComponent
   },
   {
     path: '**',
