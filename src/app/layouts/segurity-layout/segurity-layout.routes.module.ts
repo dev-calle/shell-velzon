@@ -8,6 +8,7 @@ import { MenuComponent } from './menu/menu.component';
 import { ActivityComponent } from './activity/activity.component';
 import { ProjectComponent } from './project/project.component';
 import { TimesheetComponent } from './timesheet/timesheet.component';
+import { StateCatalogComponent } from './state-catalog/state-catalog.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,10 @@ const routes: Routes = [
   {
     path: 'timesheet',
     component: TimesheetComponent
+  },
+  {
+    path: 'state-catalog',
+    component: StateCatalogComponent
   },
   {
     path: '**',
