@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
-            <h4 class="card-title mb-0 flex-grow-1">Lista de timesheet</h4>
+            <h4 class="card-title mb-0 flex-grow-1">Timesheet</h4>
             <button class="btn btn-primary d-flex gap-1" (click)="onAddTimesheet(content)">
                 <i class="ri-user-add-fill"></i> Agregar timesheet
             </button>
@@ -11,7 +11,7 @@
 
         <form class="app-search d-none d-md-block" [formGroup]="formSearch">
             <div class="position-relative">
-                <input type="text" class="form-control" placeholder="Buscar menú" autocomplete="off"
+                <input type="text" class="form-control" placeholder="Buscar timesheet" autocomplete="off"
                     formControlName="filter">
                 <span class="mdi mdi-magnify search-widget-icon"></span>
                 <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"></span>
