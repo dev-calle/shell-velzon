@@ -12,6 +12,7 @@ import { category, calendarEvents, createEventId } from './data';
 import { DatePipe } from '@angular/common';
 
 import esLocale from '@fullcalendar/core/locales/es';
+import listPlugin from '@fullcalendar/list';
 
 @Component({
   selector: 'app-calendar',
@@ -82,7 +83,7 @@ export class CalendarComponent implements OnInit {
   */
   calendarOptions: CalendarOptions = {
     headerToolbar: {
-      left: 'dayGridMonth,dayGridWeek,dayGridDay',
+      left: 'dayGridMonth,listWeek',
       center: 'title',
       right: 'prevYear,prev,next,nextYear'
     },
@@ -98,7 +99,8 @@ export class CalendarComponent implements OnInit {
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this),
     locale: "es",
-    locales: [esLocale]
+    locales: [esLocale],
+    plugins: [listPlugin]
   };
   currentEvents: EventApi[] = [];
 
