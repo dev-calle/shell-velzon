@@ -1,1 +1,1 @@
-export const APP_NAME = 'Timesheet';
+export const APP_NAME = 'SOEN - Timesheet';
