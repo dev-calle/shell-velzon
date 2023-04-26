@@ -31,6 +31,19 @@ import { TimesheetComponent } from './timesheet/timesheet.component';
 import { StateCatalogComponent } from './state-catalog/state-catalog.component';
 import { NomenclatureComponent } from './nomenclature/nomenclature.component';
 
+import { FlatpickrModule } from 'angularx-flatpickr';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+
+import { DatePipe } from '@angular/common';
+import { CalendarComponent } from '../calendar/calendar.component';
+
+FullCalendarModule.registerPlugins([
+  dayGridPlugin,
+  interactionPlugin
+]);
+
 @NgModule({
   declarations: [
     SegurityLayoutComponent,
@@ -43,6 +56,7 @@ import { NomenclatureComponent } from './nomenclature/nomenclature.component';
     TimesheetComponent,
     StateCatalogComponent,
     NomenclatureComponent,
+    CalendarComponent,
     EstadoPipe
   ],
   imports: [
@@ -63,9 +77,11 @@ import { NomenclatureComponent } from './nomenclature/nomenclature.component';
     FeatherModule.pick(allIcons),
 
     RouterModule,
-    NgSelectModule
+    NgSelectModule,
+    FullCalendarModule,
+    FlatpickrModule.forRoot()
   ],
-  providers: [LocalStorageService]
+  providers: [LocalStorageService, DatePipe]
 })
 export class SegurityLayoutModule {
 

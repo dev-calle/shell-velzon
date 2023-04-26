@@ -10,6 +10,7 @@ import { ProjectComponent } from './project/project.component';
 import { TimesheetComponent } from './timesheet/timesheet.component';
 import { StateCatalogComponent } from './state-catalog/state-catalog.component';
 import { NomenclatureComponent } from './nomenclature/nomenclature.component';
+import { CalendarComponent } from '../calendar/calendar.component';
 
 const routes: Routes = [
   {
@@ -43,7 +44,7 @@ const routes: Routes = [
   },
   {
     path: 'timesheet',
-    component: TimesheetComponent
+    component: CalendarComponent
   },
   {
     path: 'state-catalog',
