@@ -61,7 +61,7 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="formAddRole">
-            <div class="row mb-3">
+            <div class="row mb-3" *ngIf="option !== 'ADD'">
                 <div class="col-lg-3">
                     <label for="code" class="form-label">Código</label>
                 </div>

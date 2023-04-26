@@ -70,7 +70,7 @@ export class RoleComponent implements OnInit, OnDestroy {
 
   createformAddRole() {
     this.formAddRole = this._fb.group({
-      code: [null, [Validators.required]],
+      code: [null, []],
       name: [null, [Validators.required]],
       menus: [[], [Validators.required, nonEmptyArrayValidator]]
     })
@@ -144,7 +144,6 @@ export class RoleComponent implements OnInit, OnDestroy {
 
   buildformAddRole() {
     return {
-      codigo: this.fModal['code'].value,
       nombre: this.fModal['name'].value,
       menus: this.fModal['menus'].value
     }
