@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 import { category, calendarEvents, createEventId } from './data';
 import { DatePipe } from '@angular/common';
 
+import esLocale from '@fullcalendar/core/locales/es';
+
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -94,7 +96,9 @@ export class CalendarComponent implements OnInit {
     dayMaxEvents: true,
     dateClick: this.openModal.bind(this),
     eventClick: this.handleEventClick.bind(this),
-    eventsSet: this.handleEvents.bind(this)
+    eventsSet: this.handleEvents.bind(this),
+    locale: "es",
+    locales: [esLocale]
   };
   currentEvents: EventApi[] = [];
 

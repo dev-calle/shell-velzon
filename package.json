@@ -21,6 +21,7 @@
     "@angular/router": "^14.2.0",
     "@ctrl/ngx-emoji-mart": "^1.0.6",
     "@fullcalendar/angular": "^5.11.2",
+    "@fullcalendar/core": "^5.11.4",
     "@fullcalendar/daygrid": "^5.11.3",
     "@fullcalendar/interaction": "^5.11.3",
     "@ng-bootstrap/ng-bootstrap": "^13.0.0",
