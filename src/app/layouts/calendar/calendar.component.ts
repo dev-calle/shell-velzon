@@ -53,18 +53,20 @@ export class CalendarComponent implements OnInit {
       { label: 'Calendar', active: true }
     ];
 
-    // Validation
-    this.formData = this.formBuilder.group({
-      title: ['', [Validators.required]],
-      category: ['', [Validators.required]],
-      location: ['', [Validators.required]],
-      desription: ['', [Validators.required]],
-      date: ['', Validators.required],
-      start: ['', Validators.required],
-      end: ['', Validators.required]
-    });
+    this.createForm();
 
     this._fetchData();
+  }
+
+  createForm() {
+    // Validation
+    this.formData = this.formBuilder.group({
+      date: ['', Validators.required],
+      project: ['', [Validators.required]],
+      activity: ['', [Validators.required]],
+      hour: [1, [Validators.required, Validators.min(1)]],
+      observation: ['', []],
+    });
   }
 
   /**
@@ -120,17 +122,18 @@ export class CalendarComponent implements OnInit {
    */
   handleEventClick(clickInfo: EventClickArg) {
     this.editEvent = clickInfo.event;
-
-    this.formEditData = this.formBuilder.group({
-      editTitle: clickInfo.event.title,
-      editCategory: clickInfo.event.classNames[0],
-      editlocation: clickInfo.event.extendedProps['location'],
-      editDescription: clickInfo.event.extendedProps['desription'],
-      editDate: clickInfo.event.start,
-      editStart: clickInfo.event.start,
-      editEnd: clickInfo.event.end
-    });
+    this.createFormEdit();
     this.modalService.open(this.editmodalShow, { centered: true });
+  }
+
+  createFormEdit() {
+    this.formEditData = this.formBuilder.group({
+      editDate: this.editEvent.start,
+      editProject: this.editEvent.extendedProps['project'],
+      editActivity: this.editEvent.extendedProps['activity'],
+      editHour: this.editEvent.extendedProps['hour'],
+      editObservation: this.editEvent.extendedProps['observation'],
+    });
   }
 
   /**
@@ -148,8 +151,8 @@ export class CalendarComponent implements OnInit {
     this.formData = this.formBuilder.group({
       title: '',
       category: '',
-      location: '',
-      desription: '',
+      hour: '',
+      observation: '',
       date: '',
       start: '',
       end: ''
@@ -195,48 +198,29 @@ export class CalendarComponent implements OnInit {
    */
   saveEvent() {
     if (this.formData.valid) {
-      const className = this.formData.get('category')!.value;
-      const title = this.formData.get('title')!.value;
-      const location = this.formData.get('location')!.value;
-      const desription = this.formData.get('desription')!.value
       const date = this.formData.get('date')!.value
-      const starttime = this.formData.get('start')!.value;
-      const endtime = this.formData.get('end')!.value;
-      const yy = new Date(date).getFullYear();
-      const mm = new Date(date).getMonth() + 1;
-      const dd = new Date(date).getDate();
+      const project = this.formData.get('project')!.value;
+      const activity = this.formData.get('activity')!.value;
+      const hour = this.formData.get('hour')!.value;
+      const observation = this.formData.get('observation')!.value;
 
-      const start = new Date(mm + '-' + dd + '-' + yy);
-      start.setHours((starttime.split(' ')[0]).split(':')[0]);
-      start.setMinutes((starttime.split(' ')[0]).split(':')[1]);
-
-      const end = new Date(mm + '-' + dd + '-' + yy);
-      end.setHours((endtime.split(' ')[0]).split(':')[0]);
-      end.setMinutes((endtime.split(' ')[0]).split(':')[1]);
       const calendarApi = this.newEventDate.view.calendar;
 
-      calendarApi.addEvent({
+      const event = {
         id: createEventId(),
-        title,
-        date,
-        start,
-        end,
-        location,
-        desription,
-        className: className + ' ' + 'text-white'
-      });
+        title: 'Project',
+        start: date,
+        end: date,    
+        project,    
+        activity,
+        hour,
+        observation,
+        className: 'bg-soft-info' + ' ' + 'text-white'
+      };
+      calendarApi.addEvent(event);
       this.position();
-      this.formData = this.formBuilder.group({
-        title: '',
-        category: '',
-        location: '',
-        desription: '',
-        date: '',
-        start: '',
-        end: ''
-      });
+      this.createForm();
       this.modalService.dismissAll();
-    } else {
     }
     this.submitted = true;
   }
@@ -246,27 +230,36 @@ export class CalendarComponent implements OnInit {
    */
   editEventSave() {
 
-    const editTitle = this.formEditData.get('editTitle')!.value;
-    const editCategory = this.formEditData.get('editCategory')!.value;
+    const editDate = this.formEditData.get('editDate')!.value
+    const editProject = this.formEditData.get('editProject')!.value;
+    const editActivity = this.formEditData.get('editActivity')!.value;
+    const editHour = this.formEditData.get('editHour')!.value;
+    const editObservation = this.formEditData.get('editObservation')!.value;
+
+    this.editEvent.setStart(editDate);
+    this.editEvent.setEnd(editDate);
+    this.editEvent.setExtendedProp('project', editProject);
+    this.editEvent.setExtendedProp('activity', editActivity);
+    this.editEvent.setExtendedProp('hour', editHour);
+    this.editEvent.setExtendedProp('observation', editObservation);
 
     const editId = this.calendarEvents.findIndex(
       (x) => x.id + '' === this.editEvent.id + ''
     );
-
-    this.editEvent.setProp('title', editTitle);
-    this.editEvent.setProp('classNames', editCategory);
-
-    this.calendarEvents[editId] = {
+    const editEvent = {
       ...this.editEvent,
-      title: editTitle,
       id: this.editEvent.id,
-      classNames: editCategory,
+      title: 'Project',
+      start: editDate,    
+      project: editProject,    
+      activity: editActivity,
+      hour: editHour,
+      observation: editObservation,
+      className: 'bg-soft-info' + ' ' + 'text-white'
     };
+    this.calendarEvents[editId] = editEvent;
     this.Editposition();
-    this.formEditData = this.formBuilder.group({
-      editTitle: '',
-      editCategory: '',
-    });
+    this.createFormEdit();
     this.modalService.dismissAll();
   }
 
