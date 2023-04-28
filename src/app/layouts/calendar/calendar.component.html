@@ -62,7 +62,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Proyecto</label>
                                 <select class="form-select" name="project" formControlName="project"
-                                    [ngClass]="{'is-invalid': submitted && form['project'].errors}" id="event-project"
+                                    [ngClass]="{'is-invalid': submitted && form['project']!.errors}" id="event-project"
                                     required>
                                     <option value="bg-soft-danger">Danger</option>
                                     <option value="bg-soft-success">Success</option>
@@ -78,7 +78,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Actividad</label>
                                 <select class="form-select" name="activity" formControlName="activity"
-                                    [ngClass]="{'is-invalid': submitted && form['activity'].errors}" id="event-activity"
+                                    [ngClass]="{'is-invalid': submitted && form['activity']!.errors}" id="event-activity"
                                     required>
                                     <option value="bg-soft-danger">Danger</option>
                                     <option value="bg-soft-success">Success</option>
@@ -97,7 +97,7 @@
                                     <input class="form-control" placeholder="Ingrese las horas" type="number"
                                         name="event-hour" id="event-hour" required
                                         formControlName="hour" [min]="1"
-                                        [ngClass]="{ 'is-invalid': submitted && form['hour'].errors }" />
+                                        [ngClass]="{ 'is-invalid': submitted && form['hour']!.errors }" />
                                 </div>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
                                 <label class="form-label">Observación</label>
                                 <textarea class="form-control" id="event-observation" placeholder="Ingrese una observación"
                                     rows="3" spellcheck="false" formControlName="observation"
-                                    [ngClass]="{ 'is-invalid': submitted && form['observation'].errors }"></textarea>
+                                    [ngClass]="{ 'is-invalid': submitted && form['observation']!.errors }"></textarea>
                             </div>
                         </div>
                         <!--end col-->

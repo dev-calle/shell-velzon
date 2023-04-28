@@ -221,8 +221,10 @@ export class CalendarComponent implements OnInit {
       this.position();
       this.createForm();
       this.modalService.dismissAll();
+      this.submitted = false;
+    } else {
+      this.submitted = true;
     }
-    this.submitted = true;
   }
 
   /**
