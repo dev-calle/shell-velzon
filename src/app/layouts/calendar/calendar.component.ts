@@ -167,7 +167,7 @@ export class CalendarComponent implements OnInit {
     Swal.fire({
       position: 'center',
       icon: 'success',
-      title: 'Event has been saved',
+      title: 'El registro ha sido guardado',
       showConfirmButton: false,
       timer: 1000,
     });
@@ -180,7 +180,7 @@ export class CalendarComponent implements OnInit {
     Swal.fire({
       position: 'center',
       icon: 'success',
-      title: 'Event has been Updated',
+      title: 'El registro ha sido actualizado',
       showConfirmButton: false,
       timer: 1000,
     });
@@ -268,17 +268,18 @@ export class CalendarComponent implements OnInit {
    */
   confirm() {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'You won\'t be able to revert this!',
+      title: 'Estás seguro?',
+      text: 'No podrás revertir esto!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#34c38f',
       cancelButtonColor: '#f46a6a',
-      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Sí, eliminarlo!',
     }).then((result) => {
       if (result.value) {
         this.deleteEventData();
-        Swal.fire('Deleted!', 'Event has been deleted.', 'success');
+        Swal.fire('Eliminado!', 'El registro ha sido eliminado.', 'success');
       }
     });
   }
