@@ -13,6 +13,10 @@ import { DatePipe } from '@angular/common';
 
 import esLocale from '@fullcalendar/core/locales/es';
 import listPlugin from '@fullcalendar/list';
+import { ProjectService } from 'src/app/services/project.service';
+import { ActivityService } from 'src/app/services/activity.service';
+import { forkJoin } from 'rxjs';
+import { nonEmptyArrayValidator } from 'src/app/utils';
 
 @Component({
   selector: 'app-calendar',
@@ -41,8 +45,13 @@ export class CalendarComponent implements OnInit {
   @ViewChild('editmodalShow') editmodalShow!: TemplateRef<any>;
   @ViewChild('modalShow') modalShow !: TemplateRef<any>;
 
+  projects = [];
+  activities = [];
+  formSearch!: UntypedFormGroup;
+
   constructor(private modalService: NgbModal, private formBuilder: UntypedFormBuilder,
-    private datePipe: DatePipe) { }
+    private datePipe: DatePipe, private _projectService: ProjectService,
+    private _activityService: ActivityService) { }
 
   ngOnInit(): void {
     /**
@@ -53,17 +62,34 @@ export class CalendarComponent implements OnInit {
       { label: 'Calendar', active: true }
     ];
 
+    this.createFormSearch();
     this.createForm();
 
     this._fetchData();
+    this.loadDataSelects();
+  }
+
+  createFormSearch() {
+    this.formSearch = this.formBuilder.group({
+      project: [[], [Validators.required, nonEmptyArrayValidator]],
+      activity: [[], [Validators.required, nonEmptyArrayValidator]]
+    })
+  }
+
+  onSearch() {
+    if(this.formSearch.invalid) {
+      this.formSearch.markAllAsTouched();
+      return;
+    }
+    console.log(this.formSearch.value);
   }
 
   createForm() {
     // Validation
     this.formData = this.formBuilder.group({
       date: ['', Validators.required],
-      project: ['', [Validators.required]],
-      activity: ['', [Validators.required]],
+      project: [null, [Validators.required]],
+      activity: [null, [Validators.required]],
       hour: [1, [Validators.required, Validators.min(1)]],
       observation: ['', []],
     });
@@ -292,5 +318,13 @@ export class CalendarComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-
+  loadDataSelects() {
+    const params = { limit: '100', page: '1', filter: '', order: '' };
+    const projects$ = this._projectService.getProjects(params.limit, params.page, params.filter, params.order);
+    const activities$ = this._activityService.getActivities(params.limit, params.page, params.filter, params.order);
+    forkJoin([ projects$, activities$]).subscribe(resp => {
+      this.projects = resp[0].data.map(r => { return { id: r.idproyecto, name: r.nombre } }) as [];
+      this.activities = resp[1].data.map(r => { return { id: r.idactividad, name: r.nombre } }) as [];
+    });
+  }
 }

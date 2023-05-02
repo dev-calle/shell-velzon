@@ -7,23 +7,29 @@
                         <h4 class="card-title mb-0 flex-grow-1">Timesheet</h4>
                     </div>
                     <div class="card-body">
-                        <div class="container mb-3">
+                        <form class="container mb-3" [formGroup]="formSearch" (ngSubmit)="onSearch()">
                             <div class="row">
                                 <div class="col-lg-2">
                                     <label for="date" class="form-label my-1 float-end">Proyecto</label>
                                 </div>
                                 <div class="col-lg-3">
-                                    <ng-select></ng-select>
+                                    <ng-select [items]="projects" formControlName="project" bindLabel="name"
+                                        bindValue="id" placeholder="Agregue un proyecto" [multiple]="true"
+                                        [class.is-invalid]="formSearch.get('project')?.invalid && formSearch.get('project')?.touched">
+                                    </ng-select>
                                 </div>
                                 <div class="col-lg-2">
                                     <label for="date" class="form-label my-1 float-end">Actividad</label>
                                 </div>
                                 <div class="col-lg-3">
-                                    <ng-select></ng-select>
+                                    <ng-select [items]="activities" formControlName="activity" bindLabel="name"
+                                        bindValue="id" placeholder="Agregue una actividad" [multiple]="true"
+                                        [class.is-invalid]="formSearch.get('activity')?.invalid && formSearch.get('activity')?.touched">
+                                    </ng-select>
                                 </div>
                                 <button class="col-lg-2 btn btn-primary">Buscar</button>
                             </div>
-                        </div>
+                        </form>
                         <hr>
                         <div id="calendar"></div>
                         <full-calendar [options]="calendarOptions"></full-calendar>
@@ -61,32 +67,20 @@
                         <div class="col-12">
                             <div class="mb-3">
                                 <label class="form-label">Proyecto</label>
-                                <select class="form-select" name="project" formControlName="project"
-                                    [ngClass]="{'is-invalid': submitted && form['project']!.errors}" id="event-project"
-                                    required>
-                                    <option value="bg-soft-danger">Danger</option>
-                                    <option value="bg-soft-success">Success</option>
-                                    <option value="bg-soft-primary">Primary</option>
-                                    <option value="bg-soft-info">Info</option>
-                                    <option value="bg-soft-dark">Dark</option>
-                                    <option value="bg-soft-warning">Warning</option>
-                                </select>
+                                <ng-select [items]="projects" formControlName="project" bindLabel="name" bindValue="id"
+                                    placeholder="Agregue un proyecto"
+                                    [class.is-invalid]="submitted && form['project']!.errors">
+                                </ng-select>
                             </div>
                         </div>
                         <!--end col-->
                         <div class="col-12">
                             <div class="mb-3">
                                 <label class="form-label">Actividad</label>
-                                <select class="form-select" name="activity" formControlName="activity"
-                                    [ngClass]="{'is-invalid': submitted && form['activity']!.errors}" id="event-activity"
-                                    required>
-                                    <option value="bg-soft-danger">Danger</option>
-                                    <option value="bg-soft-success">Success</option>
-                                    <option value="bg-soft-primary">Primary</option>
-                                    <option value="bg-soft-info">Info</option>
-                                    <option value="bg-soft-dark">Dark</option>
-                                    <option value="bg-soft-warning">Warning</option>
-                                </select>
+                                <ng-select [items]="activities" formControlName="activity" bindLabel="name" bindValue="id"
+                                    placeholder="Agregue una actividad"
+                                    [class.is-invalid]="submitted && form['activity']!.errors">
+                                </ng-select>
                             </div>
                         </div>
                         <!--end col-->
@@ -95,8 +89,7 @@
                                 <label for="event-hour">Horas</label>
                                 <div>
                                     <input class="form-control" placeholder="Ingrese las horas" type="number"
-                                        name="event-hour" id="event-hour" required
-                                        formControlName="hour" [min]="1"
+                                        name="event-hour" id="event-hour" required formControlName="hour" [min]="1"
                                         [ngClass]="{ 'is-invalid': submitted && form['hour']!.errors }" />
                                 </div>
                             </div>
@@ -105,8 +98,9 @@
                         <div class="col-12">
                             <div class="mb-3">
                                 <label class="form-label">Observación</label>
-                                <textarea class="form-control" id="event-observation" placeholder="Ingrese una observación"
-                                    rows="3" spellcheck="false" formControlName="observation"
+                                <textarea class="form-control" id="event-observation"
+                                    placeholder="Ingrese una observación" rows="3" spellcheck="false"
+                                    formControlName="observation"
                                     [ngClass]="{ 'is-invalid': submitted && form['observation']!.errors }"></textarea>
                             </div>
                         </div>
@@ -114,7 +108,8 @@
                     </div>
                     <div class="hstack gap-2 justify-content-end">
                         <button type="submit" class="btn btn-primary" id="btn-save-event">Guardar</button>
-                        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('Cross click')">Cancelar</button>
+                        <button type="button" class="btn btn-outline-secondary"
+                            (click)="modal.dismiss('Cross click')">Cancelar</button>
                     </div>
                 </form>
             </div>
@@ -130,42 +125,33 @@
             </div>
             <div class="modal-body p-4">
                 <form [formGroup]="formEditData" (ngSubmit)="editEventSave()">
-                    <div class="row event-form">                          
+                    <div class="row event-form">
                         <div class="col-12">
                             <div class="mb-3">
                                 <label>Fecha</label>
                                 <div class="input-group">
-                                    <input class="form-control flatpickr-input" type="text" mwlFlatpickr name="editDate" formControlName="editDate"
-                                        [altInput]="true" altFormat="d/m/Y" [convertModelValue]="true" placeholder="Seleccione una fecha">
+                                    <input class="form-control flatpickr-input" type="text" mwlFlatpickr name="editDate"
+                                        formControlName="editDate" [altInput]="true" altFormat="d/m/Y"
+                                        [convertModelValue]="true" placeholder="Seleccione una fecha">
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                         <!--end col-->
                         <div class="col-12">
                             <div class="mb-3">
                                 <label class="form-label">Proyecto</label>
-                                <select class="form-control" name="eproject" formControlName="editProject" required>
-                                    <option value="bg-soft-danger">Danger</option>
-                                    <option value="bg-soft-success">Success</option>
-                                    <option value="bg-soft-primary">Primary</option>
-                                    <option value="bg-soft-info">Info</option>
-                                    <option value="bg-soft-dark">Dark</option>
-                                    <option value="bg-soft-warning">Warning</option>
-                                </select>
+                                <ng-select [items]="projects" formControlName="editProject" bindLabel="name" bindValue="id"
+                                    placeholder="Agregue un proyecto">
+                                </ng-select>
                             </div>
                         </div>
                         <!--end col-->
                         <div class="col-12">
                             <div class="mb-3">
                                 <label class="form-label">Actividad</label>
-                                <select class="form-control" name="eactivity" formControlName="editActivity" required>
-                                    <option value="bg-soft-danger">Danger</option>
-                                    <option value="bg-soft-success">Success</option>
-                                    <option value="bg-soft-primary">Primary</option>
-                                    <option value="bg-soft-info">Info</option>
-                                    <option value="bg-soft-dark">Dark</option>
-                                    <option value="bg-soft-warning">Warning</option>
-                                </select>
+                                <ng-select [items]="activities" formControlName="editActivity" bindLabel="name" bindValue="id"
+                                    placeholder="Agregue una actividad">
+                                </ng-select>
                             </div>
                         </div>
                         <!--end col-->
@@ -182,8 +168,9 @@
                         <div class="col-12">
                             <div class="mb-3">
                                 <label class="form-label">Observación</label>
-                                <textarea class="form-control" name="editObservation" placeholder="Ingrese una observación" formControlName="editObservation"
-                                    rows="3" spellcheck="false"></textarea>
+                                <textarea class="form-control" name="editObservation"
+                                    placeholder="Ingrese una observación" formControlName="editObservation" rows="3"
+                                    spellcheck="false"></textarea>
                             </div>
                         </div>
                         <!--end col-->
@@ -192,7 +179,8 @@
                         <button type="submit" class="btn btn-primary" id="btn-save-event">Guardar</button>
                         <button type="button" class="btn btn-soft-danger" id="btn-delete-event" (click)="confirm()"><i
                                 class="ri-close-line align-bottom"></i> Eliminar</button>
-                        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('Cross click')">Cancelar</button>
+                        <button type="button" class="btn btn-outline-secondary"
+                            (click)="modal.dismiss('Cross click')">Cancelar</button>
                     </div>
                 </form>
             </div>
