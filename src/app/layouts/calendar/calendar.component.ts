@@ -110,10 +110,10 @@ export class CalendarComponent implements OnInit {
    * Event add modal
    */
   openModal(event?: any) {
+    this.createForm();
+    const { date } = event;
     this.newEventDate = event,
-      this.formBuilder.group({
-        editDate: this.newEventDate.date
-      })
+    this.form['date'].setValue(date);
     this.modalService.open(this.modalShow, { centered: true });
   }
 
@@ -215,7 +215,6 @@ export class CalendarComponent implements OnInit {
         activity,
         hour,
         observation,
-        className: 'bg-soft-info' + ' ' + 'text-white'
       };
       calendarApi.addEvent(event);
       this.position();
@@ -257,7 +256,6 @@ export class CalendarComponent implements OnInit {
       activity: editActivity,
       hour: editHour,
       observation: editObservation,
-      className: 'bg-soft-info' + ' ' + 'text-white'
     };
     this.calendarEvents[editId] = editEvent;
     this.Editposition();
