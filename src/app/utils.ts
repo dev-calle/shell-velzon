@@ -15,3 +15,15 @@ export function nonEmptyArrayValidator(control: FormControl): ValidationErrors |
   }
   return null;
 }
+
+export function formattedFirstDayOfMonth(): string {
+  const today = new Date();
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  return firstDayOfMonth.toISOString().slice(0, 10);
+}
+
+export function formattedLastDayOfMonth(): string {
+  const today = new Date();
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  return lastDayOfMonth.toISOString().slice(0, 10);
+}

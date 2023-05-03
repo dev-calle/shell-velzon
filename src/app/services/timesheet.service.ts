@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ITimeSheetRes } from '../interfaces/timesheets.interface';
 import { IItemTimesheetRes } from '../interfaces/item-timesheet.interface';
+import { IEventTimesheetRes } from '../interfaces/event-timesheet.interface';
 
 const { timesheet_server: URI } = environment;
 
@@ -36,5 +37,15 @@ export class TimesheetService {
 
     deleteTimesheet(id: string) {
         return this._http.delete<any>(`${URI}/timesheet/${id}`);
+    }
+
+    getEvents(page: string = '1', dateStart: string, dateEnd: string, projecto: string = '', actividad: string = '') {
+        let params = new HttpParams();
+        params = params.set('page', page);
+        params = params.set('dateStart', dateStart);
+        params = params.set('dateEnd', dateEnd);
+        params = params.set('projecto', projecto);
+        params = params.set('actividad', actividad);
+        return this._http.get<IEventTimesheetRes>(`${URI}/timesheet`, { params });
     }
 }

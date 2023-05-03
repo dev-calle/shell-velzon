@@ -8,7 +8,7 @@ import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms
 // Sweet Alert
 import Swal from 'sweetalert2';
 
-import { category, calendarEvents, createEventId } from './data';
+import { calendarEvents, createEventId } from './data';
 import { DatePipe } from '@angular/common';
 
 import esLocale from '@fullcalendar/core/locales/es';
@@ -16,7 +16,8 @@ import listPlugin from '@fullcalendar/list';
 import { ProjectService } from 'src/app/services/project.service';
 import { ActivityService } from 'src/app/services/activity.service';
 import { forkJoin } from 'rxjs';
-import { nonEmptyArrayValidator } from 'src/app/utils';
+import { formattedFirstDayOfMonth, formattedLastDayOfMonth, nonEmptyArrayValidator } from 'src/app/utils';
+import { TimesheetService } from 'src/app/services/timesheet.service';
 
 @Component({
   selector: 'app-calendar',
@@ -37,7 +38,6 @@ export class CalendarComponent implements OnInit {
   editEvent: any;
   formEditData!: UntypedFormGroup;
   newEventDate: any;
-  category!: any[];
   submitted = false;
 
   // Calendar click Event
@@ -51,7 +51,7 @@ export class CalendarComponent implements OnInit {
 
   constructor(private modalService: NgbModal, private formBuilder: UntypedFormBuilder,
     private datePipe: DatePipe, private _projectService: ProjectService,
-    private _activityService: ActivityService) { }
+    private _activityService: ActivityService, private timesheetService: TimesheetService) { }
 
   ngOnInit(): void {
     /**
@@ -99,11 +99,25 @@ export class CalendarComponent implements OnInit {
    * Fetches the data
    */
   private _fetchData() {
-    // Event category
-    this.category = category;
-
     // Calender Event Data
-    this.calendarEvents = calendarEvents;
+    const firstDayOfMonth = formattedFirstDayOfMonth();
+    const lastDayOfMonth = formattedLastDayOfMonth();
+
+    this.timesheetService.getEvents('1', firstDayOfMonth, lastDayOfMonth).subscribe(resp => {
+      this.calendarEvents = resp.data.map(ts => {
+        return {
+          id: ts.idtimesheet,
+          title: `[${ts.proyecto}] ${ts.actividad}`,
+          start:  ts.fecha.slice(0, 10),
+          end: ts.fecha.slice(0, 10),
+          project: ts.idproyecto,
+          activity: ts.idactividad,
+          hour: ts.hora,
+          observation: ts.observacion
+        }
+      });
+      this.calendarOptions.events = this.calendarEvents;
+    })
   }
 
   /***
@@ -117,7 +131,6 @@ export class CalendarComponent implements OnInit {
     },
     initialView: "dayGridMonth",
     themeSystem: "bootstrap",
-    initialEvents: calendarEvents,
     weekends: true,
     editable: true,
     selectable: true,
@@ -128,7 +141,7 @@ export class CalendarComponent implements OnInit {
     eventsSet: this.handleEvents.bind(this),
     locale: "es",
     locales: [esLocale],
-    plugins: [listPlugin]
+    plugins: [listPlugin],
   };
   currentEvents: EventApi[] = [];
 
