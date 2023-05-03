@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 
 // Calendar option
-import { CalendarOptions, EventClickArg, EventApi } from '@fullcalendar/angular';
+import { CalendarOptions, EventClickArg, EventApi, DatesSetArg } from '@fullcalendar/angular';
 // BootStrap
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms';
@@ -15,7 +15,7 @@ import esLocale from '@fullcalendar/core/locales/es';
 import listPlugin from '@fullcalendar/list';
 import { ProjectService } from 'src/app/services/project.service';
 import { ActivityService } from 'src/app/services/activity.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, map } from 'rxjs';
 import { formattedFirstDayOfMonth, formattedLastDayOfMonth, nonEmptyArrayValidator } from 'src/app/utils';
 import { TimesheetService } from 'src/app/services/timesheet.service';
 
@@ -35,6 +35,7 @@ export class CalendarComponent implements OnInit {
 
   // calendar
   calendarEvents!: any[];
+  currentIdEvents: string[] = [];
   editEvent: any;
   formEditData!: UntypedFormGroup;
   newEventDate: any;
@@ -65,7 +66,6 @@ export class CalendarComponent implements OnInit {
     this.createFormSearch();
     this.createForm();
 
-    this._fetchData();
     this.loadDataSelects();
   }
 
@@ -77,7 +77,7 @@ export class CalendarComponent implements OnInit {
   }
 
   onSearch() {
-    if(this.formSearch.invalid) {
+    if (this.formSearch.invalid) {
       this.formSearch.markAllAsTouched();
       return;
     }
@@ -98,26 +98,27 @@ export class CalendarComponent implements OnInit {
   /**
    * Fetches the data
    */
-  private _fetchData() {
-    // Calender Event Data
-    const firstDayOfMonth = formattedFirstDayOfMonth();
-    const lastDayOfMonth = formattedLastDayOfMonth();
-
-    this.timesheetService.getEvents('1', firstDayOfMonth, lastDayOfMonth).subscribe(resp => {
-      this.calendarEvents = resp.data.map(ts => {
-        return {
-          id: ts.idtimesheet,
-          title: `[${ts.proyecto}] ${ts.actividad}`,
-          start:  ts.fecha.slice(0, 10),
-          end: ts.fecha.slice(0, 10),
-          project: ts.idproyecto,
-          activity: ts.idactividad,
-          hour: ts.hora,
-          observation: ts.observacion
-        }
-      });
-      this.calendarOptions.events = this.calendarEvents;
-    })
+  private _fetchData(event: DatesSetArg) {
+    const { startStr, endStr } = event;
+    this.timesheetService.getEvents('1', startStr.slice(0,10), endStr.slice(0,10))
+      .pipe(
+        map(resp => resp.data.filter(event => !this.currentIdEvents.includes(event.idtimesheet)))
+      )
+      .subscribe(resp => {
+        this.calendarEvents = resp.map(ts => {
+          return {
+            id: ts.idtimesheet,
+            title: `[${ts.proyecto}] ${ts.actividad}`,
+            start: ts.fecha.slice(0, 10),
+            end: ts.fecha.slice(0, 10),
+            project: ts.idproyecto,
+            activity: ts.idactividad,
+            hour: ts.hora,
+            observation: ts.observacion
+          }
+        });
+        this.calendarOptions.events = this.calendarEvents;
+      })
   }
 
   /***
@@ -142,6 +143,7 @@ export class CalendarComponent implements OnInit {
     locale: "es",
     locales: [esLocale],
     plugins: [listPlugin],
+    datesSet: this._fetchData.bind(this)
   };
   currentEvents: EventApi[] = [];
 
@@ -152,7 +154,7 @@ export class CalendarComponent implements OnInit {
     this.createForm();
     const { date } = event;
     this.newEventDate = event,
-    this.form['date'].setValue(date);
+      this.form['date'].setValue(date);
     this.modalService.open(this.modalShow, { centered: true });
   }
 
@@ -237,29 +239,37 @@ export class CalendarComponent implements OnInit {
    */
   saveEvent() {
     if (this.formData.valid) {
-      const date = this.formData.get('date')!.value
+      const date = this.formData.get('date')!.value;
       const project = this.formData.get('project')!.value;
       const activity = this.formData.get('activity')!.value;
       const hour = this.formData.get('hour')!.value;
       const observation = this.formData.get('observation')!.value;
-
-      const calendarApi = this.newEventDate.view.calendar;
-
-      const event = {
-        id: createEventId(),
-        title: 'Project',
-        start: date,
-        end: date,    
-        project,    
-        activity,
-        hour,
-        observation,
-      };
-      calendarApi.addEvent(event);
-      this.position();
-      this.createForm();
-      this.modalService.dismissAll();
-      this.submitted = false;
+      const body = {
+        fecha: date.toISOString().slice(0, 10),
+        hora: hour,
+        observacion: observation,
+        projecto: project,
+        actividad: activity
+      }
+      this.timesheetService.addTimesheet(body).subscribe((resp) => {
+        const calendarApi = this.newEventDate.view.calendar;
+        const event = {
+          id: resp.data.idtimesheet,
+          title: `[${this.loadDescriptionCombox(this.projects, project)}] ${this.loadDescriptionCombox(this.activities, activity)}`,
+          start: date,
+          end: date,
+          project,
+          activity,
+          hour,
+          observation,
+        };
+        calendarApi.addEvent(event);
+        this.currentIdEvents.push(event.id);
+        this.position();
+        this.createForm();
+        this.modalService.dismissAll();
+        this.submitted = false;
+      });
     } else {
       this.submitted = true;
     }
@@ -276,30 +286,40 @@ export class CalendarComponent implements OnInit {
     const editHour = this.formEditData.get('editHour')!.value;
     const editObservation = this.formEditData.get('editObservation')!.value;
 
-    this.editEvent.setStart(editDate);
-    this.editEvent.setEnd(editDate);
-    this.editEvent.setExtendedProp('project', editProject);
-    this.editEvent.setExtendedProp('activity', editActivity);
-    this.editEvent.setExtendedProp('hour', editHour);
-    this.editEvent.setExtendedProp('observation', editObservation);
+    const body = {
+      fecha: editDate.toISOString().slice(0, 10),
+      hora: editHour,
+      observacion: editObservation,
+      projecto: editProject,
+      actividad: editActivity,
+    }
 
-    const editId = this.calendarEvents.findIndex(
-      (x) => x.id + '' === this.editEvent.id + ''
-    );
-    const editEvent = {
-      ...this.editEvent,
-      id: this.editEvent.id,
-      title: 'Project',
-      start: editDate,    
-      project: editProject,    
-      activity: editActivity,
-      hour: editHour,
-      observation: editObservation,
-    };
-    this.calendarEvents[editId] = editEvent;
-    this.Editposition();
-    this.createFormEdit();
-    this.modalService.dismissAll();
+    this.timesheetService.editTimesheet(this.editEvent.id, body).subscribe(() => {
+      this.editEvent.setStart(editDate);
+      this.editEvent.setEnd(editDate);
+      this.editEvent.setExtendedProp('project', editProject);
+      this.editEvent.setExtendedProp('activity', editActivity);
+      this.editEvent.setExtendedProp('hour', editHour);
+      this.editEvent.setExtendedProp('observation', editObservation);
+  
+      const editId = this.calendarEvents.findIndex(
+        (x) => x.id + '' === this.editEvent.id + ''
+      );
+      const editEvent = {
+        ...this.editEvent,
+        id: this.editEvent.id,
+        title: 'Project',
+        start: editDate,
+        project: editProject,
+        activity: editActivity,
+        hour: editHour,
+        observation: editObservation,
+      };
+      this.calendarEvents[editId] = editEvent;
+      this.Editposition();
+      this.createFormEdit();
+      this.modalService.dismissAll();
+    });    
   }
 
   /**
@@ -317,8 +337,10 @@ export class CalendarComponent implements OnInit {
       confirmButtonText: 'Sí, eliminarlo!',
     }).then((result) => {
       if (result.value) {
-        this.deleteEventData();
-        Swal.fire('Eliminado!', 'El registro ha sido eliminado.', 'success');
+        this.timesheetService.deleteTimesheet(this.editEvent.id).subscribe(() => {
+          this.deleteEventData();
+          Swal.fire('Eliminado!', 'El registro ha sido eliminado.', 'success');
+        })
       }
     });
   }
@@ -335,9 +357,13 @@ export class CalendarComponent implements OnInit {
     const params = { limit: '100', page: '1', filter: '', order: '' };
     const projects$ = this._projectService.getProjects(params.limit, params.page, params.filter, params.order);
     const activities$ = this._activityService.getActivities(params.limit, params.page, params.filter, params.order);
-    forkJoin([ projects$, activities$]).subscribe(resp => {
+    forkJoin([projects$, activities$]).subscribe(resp => {
       this.projects = resp[0].data.map(r => { return { id: r.idproyecto, name: r.nombre } }) as [];
       this.activities = resp[1].data.map(r => { return { id: r.idactividad, name: r.nombre } }) as [];
     });
+  }
+
+  loadDescriptionCombox(list: any[], id: string): string {
+    return list.find((i: any) => i.id === id).name ?? '';
   }
 }
