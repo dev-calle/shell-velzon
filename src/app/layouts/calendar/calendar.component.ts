@@ -87,7 +87,7 @@ export class CalendarComponent implements OnInit {
   createForm() {
     // Validation
     this.formData = this.formBuilder.group({
-      date: ['', Validators.required],
+      date: [{ value: null, disabled: true }, Validators.required],
       project: [null, [Validators.required]],
       activity: [null, [Validators.required]],
       hour: [1, [Validators.required, Validators.min(1)]],
@@ -132,7 +132,7 @@ export class CalendarComponent implements OnInit {
     },
     initialView: "dayGridMonth",
     themeSystem: "bootstrap",
-    weekends: true,
+    weekends: false,
     editable: true,
     selectable: true,
     selectMirror: true,
@@ -143,7 +143,12 @@ export class CalendarComponent implements OnInit {
     locale: "es",
     locales: [esLocale],
     plugins: [listPlugin],
-    datesSet: this._fetchData.bind(this)
+    datesSet: this._fetchData.bind(this),
+    businessHours: {
+      daysOfWeek: [1, 2, 3, 4, 5], // lunes a viernes
+      startTime: '09:00', // hora de inicio de trabajo
+      endTime: '18:00', // hora de finalización de trabajo
+    }
   };
   currentEvents: EventApi[] = [];
 
@@ -151,6 +156,7 @@ export class CalendarComponent implements OnInit {
    * Event add modal
    */
   openModal(event?: any) {
+    console.log(event)
     this.createForm();
     const { date } = event;
     this.newEventDate = event,
@@ -169,10 +175,10 @@ export class CalendarComponent implements OnInit {
 
   createFormEdit() {
     this.formEditData = this.formBuilder.group({
-      editDate: this.editEvent.start,
-      editProject: this.editEvent.extendedProps['project'],
-      editActivity: this.editEvent.extendedProps['activity'],
-      editHour: this.editEvent.extendedProps['hour'],
+      editDate: [{ value: this.editEvent.start, disabled: true }],
+      editProject: [ this.editEvent.extendedProps['project'], [Validators.required]],
+      editActivity: [ this.editEvent.extendedProps['activity'], [Validators.required]],
+      editHour: [ this.editEvent.extendedProps['hour'], [Validators.required, Validators.min(1)]],
       editObservation: this.editEvent.extendedProps['observation'],
     });
   }
@@ -279,6 +285,10 @@ export class CalendarComponent implements OnInit {
    * save edit event data
    */
   editEventSave() {
+    if (!this.formEditData.valid) {
+      this.formEditData.markAllAsTouched();
+      return;
+    }
 
     const editDate = this.formEditData.get('editDate')!.value
     const editProject = this.formEditData.get('editProject')!.value;
@@ -295,8 +305,8 @@ export class CalendarComponent implements OnInit {
     }
 
     this.timesheetService.editTimesheet(this.editEvent.id, body).subscribe(() => {
-      this.editEvent.setStart(editDate);
-      this.editEvent.setEnd(editDate);
+      const title = `[${this.loadDescriptionCombox(this.projects, editProject)}] ${this.loadDescriptionCombox(this.activities, editActivity)}`;
+      this.editEvent.setProp('title', title);
       this.editEvent.setExtendedProp('project', editProject);
       this.editEvent.setExtendedProp('activity', editActivity);
       this.editEvent.setExtendedProp('hour', editHour);
@@ -308,8 +318,9 @@ export class CalendarComponent implements OnInit {
       const editEvent = {
         ...this.editEvent,
         id: this.editEvent.id,
-        title: 'Project',
+        title: title,
         start: editDate,
+        end: editDate,
         project: editProject,
         activity: editActivity,
         hour: editHour,
