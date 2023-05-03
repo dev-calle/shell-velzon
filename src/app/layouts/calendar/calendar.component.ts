@@ -8,7 +8,6 @@ import { UntypedFormBuilder, Validators, UntypedFormGroup } from '@angular/forms
 // Sweet Alert
 import Swal from 'sweetalert2';
 
-import { calendarEvents, createEventId } from './data';
 import { DatePipe } from '@angular/common';
 
 import esLocale from '@fullcalendar/core/locales/es';
@@ -16,7 +15,6 @@ import listPlugin from '@fullcalendar/list';
 import { ProjectService } from 'src/app/services/project.service';
 import { ActivityService } from 'src/app/services/activity.service';
 import { forkJoin, map } from 'rxjs';
-import { formattedFirstDayOfMonth, formattedLastDayOfMonth, nonEmptyArrayValidator } from 'src/app/utils';
 import { TimesheetService } from 'src/app/services/timesheet.service';
 
 @Component({
@@ -50,6 +48,9 @@ export class CalendarComponent implements OnInit {
   activities = [];
   formSearch!: UntypedFormGroup;
 
+  startStr: string = '';
+  endStr: string = '';
+
   constructor(private modalService: NgbModal, private formBuilder: UntypedFormBuilder,
     private datePipe: DatePipe, private _projectService: ProjectService,
     private _activityService: ActivityService, private timesheetService: TimesheetService) { }
@@ -71,8 +72,8 @@ export class CalendarComponent implements OnInit {
 
   createFormSearch() {
     this.formSearch = this.formBuilder.group({
-      project: [[], [Validators.required, nonEmptyArrayValidator]],
-      activity: [[], [Validators.required, nonEmptyArrayValidator]]
+      project: [],
+      activity: []
     })
   }
 
@@ -81,7 +82,7 @@ export class CalendarComponent implements OnInit {
       this.formSearch.markAllAsTouched();
       return;
     }
-    console.log(this.formSearch.value);
+    this.loadEvents();
   }
 
   createForm() {
@@ -100,7 +101,15 @@ export class CalendarComponent implements OnInit {
    */
   private _fetchData(event: DatesSetArg) {
     const { startStr, endStr } = event;
-    this.timesheetService.getEvents('1', startStr.slice(0,10), endStr.slice(0,10))
+    this.startStr =  startStr.slice(0,10);
+    this.endStr = endStr.slice(0,10);
+    this.loadEvents();
+  }
+
+  private loadEvents() {
+    const project = this.formSearch.get('project')?.value as string[];
+    const activity = this.formSearch.get('activity')?.value as string[]; 
+    this.timesheetService.getEvents('1', this.startStr, this.endStr, project?.join(','), activity?.join(','))
       .pipe(
         map(resp => resp.data.filter(event => !this.currentIdEvents.includes(event.idtimesheet)))
       )
