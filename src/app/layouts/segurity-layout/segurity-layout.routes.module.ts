@@ -9,7 +9,7 @@ import { ActivityComponent } from './activity/activity.component';
 import { ProjectComponent } from './project/project.component';
 import { StateCatalogComponent } from './state-catalog/state-catalog.component';
 import { NomenclatureComponent } from './nomenclature/nomenclature.component';
-import { CalendarComponent } from '../calendar/calendar.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 const routes: Routes = [
   {

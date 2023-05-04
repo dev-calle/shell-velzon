@@ -37,7 +37,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
 import { DatePipe } from '@angular/common';
-import { CalendarComponent } from '../calendar/calendar.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
