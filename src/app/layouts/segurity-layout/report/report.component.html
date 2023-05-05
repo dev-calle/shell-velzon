@@ -72,7 +72,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let event of eventsTimesheet">
-                        <td>{{ event.fecha }}</td>
+                        <td>{{ event.fecha | date: 'dd/MM/YYYY HH:mm a' }}</td>
                         <td>{{ event.proyecto }}</td>
                         <td>{{ event.actividad }}</td>
                         <td>{{ event.usuario }}</td>
