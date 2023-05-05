@@ -10,6 +10,7 @@ import { ProjectComponent } from './project/project.component';
 import { StateCatalogComponent } from './state-catalog/state-catalog.component';
 import { NomenclatureComponent } from './nomenclature/nomenclature.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { ReportComponent } from './report/report.component';
 
 const routes: Routes = [
   {
@@ -51,6 +52,10 @@ const routes: Routes = [
   {
     path: 'nomenclature',
     component: NomenclatureComponent
+  },
+  {
+    path: 'general-report',
+    component: ReportComponent
   },
   {
     path: '**',

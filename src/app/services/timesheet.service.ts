@@ -48,4 +48,16 @@ export class TimesheetService {
         params = params.set('actividad', actividad);
         return this._http.get<IEventTimesheetRes>(`${URI}/timesheet`, { params });
     }
+
+    getReport(limit: string, page: string, dateStart: string, dateEnd: string, proyecto: string = '', actividad: string = '', users: string = '') {
+        let params = new HttpParams();
+        params = params.set('limit', limit);
+        params = params.set('page', page);
+        params = params.set('dateStart', dateStart);
+        params = params.set('dateEnd', dateEnd);
+        params = params.set('proyecto', proyecto);
+        params = params.set('actividad', actividad);
+        params = params.set('users', users);
+        return this._http.get<IEventTimesheetRes>(`${URI}/timesheet/report/users`, { params });
+    }
 }

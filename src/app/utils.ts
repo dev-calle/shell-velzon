@@ -16,14 +16,12 @@ export function nonEmptyArrayValidator(control: FormControl): ValidationErrors |
   return null;
 }
 
-export function formattedFirstDayOfMonth(): string {
+export function firstDayOfMonth(): Date {
   const today = new Date();
-  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  return firstDayOfMonth.toISOString().slice(0, 10);
+  return new Date(today.getFullYear(), today.getMonth(), 1);
 }
 
-export function formattedLastDayOfMonth(): string {
+export function lastDayOfMonth(): Date {
   const today = new Date();
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-  return lastDayOfMonth.toISOString().slice(0, 10);
+  return new Date(today.getFullYear(), today.getMonth() + 1, 0);
 }

@@ -38,6 +38,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 import { DatePipe } from '@angular/common';
 import { CalendarComponent } from './calendar/calendar.component';
+import { ReportComponent } from './report/report.component';
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -57,6 +58,7 @@ FullCalendarModule.registerPlugins([
     StateCatalogComponent,
     NomenclatureComponent,
     CalendarComponent,
+    ReportComponent,
     EstadoPipe
   ],
   imports: [
