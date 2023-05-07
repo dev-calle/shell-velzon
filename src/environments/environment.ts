@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  timesheet_server: 'https://sotime-api-general.herokuapp.com/api/v1'
+  timesheet_server: 'http://localhost:3000/api/v1'
 };
 
 /*

@@ -49,7 +49,7 @@
                                 </span>
                             </a>
 
-                            <a [routerLink]="item.link" *ngIf="!hasItems(item)" class="side-nav-link-ref nav-link menu-link" (click)="toggleParentItem($event)">
+                            <a [routerLink]="item.link" *ngIf="!hasItems(item) && item.link" class="side-nav-link-ref nav-link menu-link" (click)="toggleParentItem($event)">
 
                                 <i class="bx {{ item.icon }} icon nav-icon" *ngIf="item.icon" class=""></i>
                                 <span class=""> {{ item.label | translate }}</span>

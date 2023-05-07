@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuItem } from '../../../interfaces/sidebar.interfaces';
 import { MENU } from './menu';
+import { Store, select } from '@ngrx/store';
+import { AppState } from 'src/app/app.state';
+import * as SimpleBar from 'simplebar';
 
 @Component({
   selector: 'app-sidebar',
@@ -20,12 +23,14 @@ export class SidebarComponent implements OnInit {
 
   constructor(
     private router: Router,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private _store: Store<AppState>
   ) {
     translate.setDefaultLang('es');
   }
 
   ngOnInit(): void {
+    this.renderMenus();
   }
 
   /***
@@ -218,4 +223,21 @@ export class SidebarComponent implements OnInit {
     document.body.classList.remove('vertical-sidebar-enable');
   }
 
+  renderMenus() {
+    const menuItems: MenuItem[] = JSON.parse(JSON.stringify(this.menuItems));
+    this._store.pipe(select(state => state.auth.menus)).subscribe(menus => {
+      menuItems.forEach((menu, index) => {
+        const target = menu.link ? menu.link : menu.subItems;
+        if(Array.isArray(target)) {
+          const target_filter = target.filter((subItem) => menus.includes(subItem.link));
+          menuItems[index].subItems = target_filter;
+        } else {
+          if(!menus.includes(target ?? '')) {
+            menuItems[index].link = undefined;
+          }
+        }
+      });
+      this.menuItems = menuItems;
+    });
+  }
 }

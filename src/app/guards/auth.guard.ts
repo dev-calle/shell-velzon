@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Store } from '@ngrx/store';
@@ -34,29 +34,23 @@ export class AuthGuard implements CanActivate {
       this.auth$ = this._menuService.getMenuValidUser()
       .subscribe( {
         next: (res) => {
+          this._router.events.subscribe((event) => {
+            if (event instanceof NavigationEnd) {
+              const url = event.urlAfterRedirects;
 
-          let url = state.url;
+              const { data: { roles, menus } } = res;
 
-          const { data: { roles, menus } } = res;
+              if(!menus.includes(url)) {
+                this.logout();
+              }
 
-          let arrUrl = url.split('/');
+              this._store.dispatch(addRoles({ roles }));
+              this._store.dispatch(addMenus({ menus }));
 
-          let newUrl = arrUrl.join('/');
-
-          if(arrUrl.length > 3) {
-            newUrl = arrUrl.slice(0, 3).join('/');
-          }
-
-          if(!menus.includes(newUrl)) {
-            this.logout();
-          }
-
-          this._store.dispatch(addRoles({ roles }));
-          this._store.dispatch(addMenus({ menus }));
-
-          this.auth$?.unsubscribe();
-          return resolve(true);
-
+              this.auth$?.unsubscribe();
+              return resolve(true);
+            }
+          });         
         },
         error: () => {
           this.auth$?.unsubscribe();

@@ -233,7 +233,6 @@ export class TopbarComponent implements OnInit {
   loadUserData() {
     this._store.pipe(select(state => state.auth)).subscribe(resp => {
       const { user, roles } = resp;
-      console.log(resp)
       this.userData = {
         first_name: user?.nombre ?? '',
         last_name: user?.apellido ?? '',
