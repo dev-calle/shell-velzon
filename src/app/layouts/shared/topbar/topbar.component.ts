@@ -231,11 +231,13 @@ export class TopbarComponent implements OnInit {
   }
 
   loadUserData() {
-    this._store.pipe(select(state => state.auth.user)).subscribe(resp => {
+    this._store.pipe(select(state => state.auth)).subscribe(resp => {
+      const { user, roles } = resp;
+      console.log(resp)
       this.userData = {
-        first_name: resp?.nombre ?? '',
-        last_name: resp?.apellido ?? '',
-        role: 'Admin'
+        first_name: user?.nombre ?? '',
+        last_name: user?.apellido ?? '',
+        role: roles?.join(' - ')
       }     
     });
   }

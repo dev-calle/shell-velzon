@@ -1,6 +1,8 @@
 export interface AuthState {
     token: string | null;
     user: User | null;
+    roles: string[];
+    menus: string[];
 }
 
 export interface User {

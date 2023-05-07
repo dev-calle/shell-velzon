@@ -9,3 +9,13 @@ export const loginSuccess = createAction(
 export const logout = createAction(
   '[Auth] Logout'
 );
+
+export const addRoles = createAction(
+  '[Auth] Add Roles',
+  props<{ roles: string[] }>()
+);
+
+export const addMenus = createAction(
+  '[Auth] Add Menus',
+  props<{ menus: string[] }>()
+);

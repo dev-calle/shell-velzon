@@ -5,6 +5,7 @@ import { IAddUserRes } from '../interfaces/add-user.interface';
 import { IItemRoleRes } from '../interfaces/item-role.interface';
 import { IMenuRes } from '../interfaces/menus.interface';
 import { IItemMenuRes } from '../interfaces/item-menu.interface';
+import { IMenuValidRes } from '../interfaces/menu-valid.interface';
 
 const { timesheet_server: URI } = environment;
 
@@ -38,5 +39,9 @@ export class MenuService {
 
     deleteMenu(id: string) {
         return this._http.delete<any>(`${URI}/menu/${id}`);
+    }
+
+    getMenuValidUser() {
+        return this._http.get<IMenuValidRes>(`${URI}/menu/valid/user`);
     }
 }
