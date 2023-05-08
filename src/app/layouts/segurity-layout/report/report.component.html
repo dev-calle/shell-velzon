@@ -82,7 +82,14 @@
                 </tbody>
             </table>
         </div>
-        <app-pagination [totalPages]="totalPages" [currentPage]="currentPage"
-        (pageChanged)="onPageChanged($event)"></app-pagination>
+        <div class="d-flex align-items-center justify-content-between">
+            <button class="btn btn-primary d-flex align-items-center gap-2" 
+                *ngIf="eventsTimesheet.length > 0" (click)="download()">
+                <i class="ri-file-excel-2-fill"></i>
+                Descargar Reporte
+            </button>
+            <app-pagination [totalPages]="totalPages" [currentPage]="currentPage"
+                (pageChanged)="onPageChanged($event)"></app-pagination>
+        </div>
     </div>
 </div>

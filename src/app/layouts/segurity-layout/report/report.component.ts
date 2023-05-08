@@ -96,4 +96,33 @@ export class ReportComponent implements OnInit {
       this.users = resp[2].data.map(r => { return { id: r.idusuario, name: r.nombre } }) as [];
     });
   }
+
+  async download(): Promise<void> {
+    const url = 'URL_DEL_SERVIDOR'; // Reemplaza con la URL de tu servidor
+
+    const dateStart = this.formSearch.get('dateStart')?.value;
+    const dateEnd = this.formSearch.get('dateEnd')?.value;
+    const project = this.formSearch.get('project')?.value as string[];
+    const activity = this.formSearch.get('activity')?.value as string[];
+    const users = this.formSearch.get('users')?.value as string[];
+
+    const { filename, blob } = await this._timesheetService.getReportExcel(dateStart.toISOString().slice(0, 10), 
+    dateEnd.toISOString().slice(0, 10), project?.join(','), activity?.join(','), users?.join(','));
+
+    if (!blob) {
+      console.error('El Blob es nulo o indefinido.');
+      return;
+    }
+
+    // Crear un enlace de descarga
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = filename;
+
+    // Simular un clic en el enlace
+    link.click();
+
+    // Liberar el objeto URL creado para el enlace
+    window.URL.revokeObjectURL(link.href);
+  }
 }

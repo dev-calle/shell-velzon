@@ -60,4 +60,22 @@ export class TimesheetService {
         params = params.set('users', users);
         return this._http.get<IEventTimesheetRes>(`${URI}/timesheet/report/users`, { params });
     }
+
+    getReportExcel(dateStart: string, dateEnd: string, proyecto: string = '', actividad: string = '', users: string = '') {
+        let params = new HttpParams();
+        params = params.set('dateStart', dateStart);
+        params = params.set('dateEnd', dateEnd);
+        params = params.set('proyecto', proyecto);
+        params = params.set('actividad', actividad);
+        params = params.set('users', users);
+
+        return this._http
+            .get(`${URI}/timesheet/report/excel`, { responseType: 'blob', observe: 'response', params })
+            .toPromise()
+            .then((response) => {
+                const filename = `Reporte_Timesheet_${dateStart}_${dateEnd}.xlsx`;
+                const blob = response?.body;
+                return { filename, blob };
+            });
+    }
 }
