@@ -9,6 +9,7 @@ import { OPTION } from 'src/app/constants/option.constants';
 import { AlertService } from 'src/app/services/alert.service';
 import { ColumnOrder } from 'src/app/interfaces/column-order.interface';
 import { RoleService } from 'src/app/services/role.service';
+import { PWD_PATTERN } from 'src/app/constants/pwd-pattern.constant';
 
 @Component({
   selector: 'app-user',
@@ -77,6 +78,7 @@ export class UserComponent implements OnInit, OnDestroy {
       name: [null, [Validators.required]],
       lastname: [null, [Validators.required]],
       content: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required, Validators.pattern(PWD_PATTERN)]],
       roles: [[], [Validators.required, nonEmptyArrayValidator]]
     })
   }
@@ -153,18 +155,23 @@ export class UserComponent implements OnInit, OnDestroy {
       nombre: this.fModal['name'].value,
       apellido: this.fModal['lastname'].value,
       contenido: this.fModal['content'].value,
+      contrasenia: this.fModal['password'].value,
       roles: this.fModal['roles'].value
     }
   }
 
   onAddUser(content: TemplateRef<any>) {
     this.option = OPTION.ADD;
+    this.fModal['password'].setValidators([Validators.required, Validators.pattern(PWD_PATTERN)]);
+    this.fModal['password'].updateValueAndValidity();
     this.open(content);
   }
 
   onEditUser(id: string, content: TemplateRef<any>) {
     this._userService.getUser(id).subscribe(resp => {
       this.option = OPTION.EDIT;
+      this.fModal['password'].setValidators(null);
+      this.fModal['password'].updateValueAndValidity();
       this.currentIdUser = id;
       this.loadDataUserForm(resp.data);
       this.open(content);

@@ -103,6 +103,16 @@
                         [class.is-invalid]="fModal['content'].invalid && fModal['content'].touched">
                 </div>
             </div>
+            <div class="row mb-3" *ngIf="option === 'ADD'">
+                <div class="col-lg-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                </div>
+                <div class="col-lg-9">
+                    <input type="password" class="form-control" id="password" placeholder="Ingrese password"
+                        formControlName="password"
+                        [class.is-invalid]="fModal['password'].invalid && fModal['password'].touched">
+                </div>
+            </div>
             <div class="row mb-3">
                 <div class="col-lg-3">
                     <label for="leaveemails" class="form-label">Roles</label>
