@@ -73,7 +73,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
   createFormAddUser() {
     this.formAddUser = this._fb.group({
-      code: [null, [Validators.required]],
+      code: [null, []],
       name: [null, [Validators.required]],
       lastname: [null, [Validators.required]],
       content: [null, [Validators.required, Validators.email]],
@@ -150,7 +150,6 @@ export class UserComponent implements OnInit, OnDestroy {
 
   buildFormAddUser() {
     return {
-      codigo: this.fModal['code'].value,
       nombre: this.fModal['name'].value,
       apellido: this.fModal['lastname'].value,
       contenido: this.fModal['content'].value,
