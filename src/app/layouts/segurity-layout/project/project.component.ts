@@ -57,6 +57,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   get fModal() { return this.formAddProject.controls; }
 
+  get titleModal() {
+    return this.option === OPTION.ADD ? 'Agregar Proyecto': 'Editar Proyecto';
+  }
+
   createForm() {
     this.formSearch = this._fb.group({
       filter: [null, []]

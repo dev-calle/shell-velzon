@@ -66,6 +66,10 @@ export class UserComponent implements OnInit, OnDestroy {
 
   get fModal() { return this.formAddUser.controls; }
 
+  get titleModal() {
+    return this.option === OPTION.ADD ? 'Agregar Usuario': 'Editar Usuario';
+  }
+
   createForm() {
     this.formSearch = this._fb.group({
       filter: [null, []]

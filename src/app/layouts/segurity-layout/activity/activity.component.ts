@@ -59,6 +59,10 @@ export class ActivityComponent implements OnInit, OnDestroy {
 
   get fModal() { return this.formAddActivity.controls; }
 
+  get titleModal() {
+    return this.option === OPTION.ADD ? 'Agregar Actividad': 'Editar Actividad';
+  }
+
   createForm() {
     this.formSearch = this._fb.group({
       filter: [null, []]

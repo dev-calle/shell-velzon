@@ -62,6 +62,10 @@ export class RoleComponent implements OnInit, OnDestroy {
 
   get fModal() { return this.formAddRole.controls; }
 
+  get titleModal() {
+    return this.option === OPTION.ADD ? 'Agregar Rol': 'Editar Rol';
+  }
+
   createForm() {
     this.formSearch = this._fb.group({
       filter: [null, []]
