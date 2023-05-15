@@ -5,7 +5,7 @@ export const MENU: MenuItem[] = [
     id: 1,
     label: 'Timesheet',
     icon: 'ri-calendar-todo-fill',
-    link: '/segurity/timesheet'
+    link: '/'
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ export const MENU: MenuItem[] = [
       {
         id: 3,
         label: 'Reporte General',
-        link: '/segurity/general-report'
+        link: '/consultas/reporte-general'
       }
     ]
   },
@@ -27,22 +27,22 @@ export const MENU: MenuItem[] = [
       {
         id: 5,
         label: 'Proyectos',
-        link: '/segurity/project'
+        link: '/administracion/proyectos'
       },
       {
         id: 6,
         label: 'Actividades',
-        link: '/segurity/activity'
+        link: '/administracion/actividades'
       },           
       {
         id: 7,
         label: 'Usuarios',
-        link: '/segurity/user'
+        link: '/administracion/usuarios'
       },
       {
         id: 8,
         label: 'Roles',
-        link: '/segurity/role'
+        link: '/administracion/roles'
       }
     ]
   }

@@ -18,9 +18,36 @@ const routes: Routes = [
     component: CalendarComponent
   },
   {
-    path: 'user',
-    component: UserComponent
+    path: 'consultas',
+    children: [
+      {
+        path: 'reporte-general',
+        component: ReportComponent
+      }
+    ]
   },
+  {
+    path: 'administracion',
+    children: [
+      {
+        path: 'proyectos',
+        component: ProjectComponent
+      },
+      {
+        path: 'actividades',
+        component: ActivityComponent
+      },
+      {
+        path: 'usuarios',
+        component: UserComponent
+      },
+      {
+        path: 'roles',
+        component: RoleComponent
+      }
+    ]
+  },
+  /*
   {
     path: 'role',
     component: RoleComponent
@@ -38,10 +65,6 @@ const routes: Routes = [
     component: ActivityComponent
   },
   {
-    path: 'project',
-    component: ProjectComponent
-  },
-  {
     path: 'timesheet',
     component: CalendarComponent
   },
@@ -54,14 +77,10 @@ const routes: Routes = [
     component: NomenclatureComponent
   },
   {
-    path: 'general-report',
-    component: ReportComponent
-  },
-  {
     path: '**',
     component: NotFoundPageComponent
   },
-
+*/
 ];
 
 @NgModule({
