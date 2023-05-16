@@ -33,7 +33,6 @@ export class ActivityComponent implements OnInit, OnDestroy {
     { name: 'codigo', text: 'Código', active: false, order: true },
     { name: 'nombre', text: 'Nombre', active: false, order: true },
     { name: 'fechacreacion', text: 'Fecha creación', active: false, order: true },
-    { name: 'usuariocreacion', text: 'Usuario creación', active: false, order: true },
     { name: 'estado', text: 'Estado', active: false, order: true },
     { name: 'editar', text: 'Editar', active: false, order: false },
     { name: 'eliminar', text: 'Eliminar', active: false, order: false }

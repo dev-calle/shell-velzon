@@ -38,7 +38,7 @@ export class UserComponent implements OnInit, OnDestroy {
     { name: 'codigo', text: 'Código', active: false, order: true },
     { name: 'nombre', text: 'Nombre', active: false, order: true },
     { name: 'apellido', text: 'Apellido', active: false, order: true },
-    { name: 'contenido', text: 'Contenido', active: false, order: true },
+    { name: 'contenido', text: 'Correo', active: false, order: true },
     { name: 'estado', text: 'Estado', active: false, order: true },
     { name: 'editar', text: 'Editar', active: false, order: false },
     { name: 'eliminar', text: 'Eliminar', active: false, order: false }
