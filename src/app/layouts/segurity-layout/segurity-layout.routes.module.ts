@@ -11,6 +11,7 @@ import { StateCatalogComponent } from './state-catalog/state-catalog.component';
 import { NomenclatureComponent } from './nomenclature/nomenclature.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { ReportComponent } from './report/report.component';
+import { ClientComponent } from './client/client.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
   {
     path: 'administracion',
     children: [
+      {
+        path: 'clientes',
+        component: ClientComponent
+      },
       {
         path: 'proyectos',
         component: ProjectComponent

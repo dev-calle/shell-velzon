@@ -23,24 +23,29 @@ export const MENU: MenuItem[] = [
     id: 4,
     label: 'Administración',
     icon: 'ri-settings-3-fill',
-    subItems: [      
+    subItems: [  
       {
         id: 5,
+        label: 'Clientes',
+        link: '/administracion/clientes'
+      },    
+      {
+        id: 6,
         label: 'Proyectos',
         link: '/administracion/proyectos'
       },
       {
-        id: 6,
+        id: 7,
         label: 'Actividades',
         link: '/administracion/actividades'
       },           
       {
-        id: 7,
+        id: 8,
         label: 'Usuarios',
         link: '/administracion/usuarios'
       },
       {
-        id: 8,
+        id: 9,
         label: 'Roles',
         link: '/administracion/roles'
       }
