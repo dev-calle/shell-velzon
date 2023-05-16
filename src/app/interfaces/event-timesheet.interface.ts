@@ -18,4 +18,6 @@ export interface EventTimesheet {
     actividad: string
     usuario: string
     estado: string
+    idcliente: string
+    cliente: string
 }

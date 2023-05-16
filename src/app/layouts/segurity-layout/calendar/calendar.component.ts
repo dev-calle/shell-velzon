@@ -16,6 +16,7 @@ import { ProjectService } from 'src/app/services/project.service';
 import { ActivityService } from 'src/app/services/activity.service';
 import { forkJoin, map } from 'rxjs';
 import { TimesheetService } from 'src/app/services/timesheet.service';
+import { ClientService } from 'src/app/services/client.service';
 
 @Component({
   selector: 'app-calendar',
@@ -44,6 +45,7 @@ export class CalendarComponent implements OnInit {
   @ViewChild('editmodalShow') editmodalShow!: TemplateRef<any>;
   @ViewChild('modalShow') modalShow !: TemplateRef<any>;
 
+  clients = [];
   projects = [];
   activities = [];
   formSearch!: UntypedFormGroup;
@@ -53,7 +55,8 @@ export class CalendarComponent implements OnInit {
 
   constructor(private modalService: NgbModal, private formBuilder: UntypedFormBuilder,
     private datePipe: DatePipe, private _projectService: ProjectService,
-    private _activityService: ActivityService, private timesheetService: TimesheetService) { }
+    private _activityService: ActivityService, private timesheetService: TimesheetService,
+    private _clientService: ClientService) { }
 
   ngOnInit(): void {
     /**
@@ -89,8 +92,9 @@ export class CalendarComponent implements OnInit {
     // Validation
     this.formData = this.formBuilder.group({
       date: [{ value: null, disabled: true }, Validators.required],
+      client: [null, [Validators.required]],
       project: [null, [Validators.required]],
-      activity: [null, [Validators.required]],
+      activity: [null, []],
       hour: [1, [Validators.required, Validators.min(1)]],
       observation: ['', []],
     });
@@ -117,9 +121,10 @@ export class CalendarComponent implements OnInit {
         this.calendarEvents = resp.map(ts => {
           return {
             id: ts.idtimesheet,
-            title: `[${ts.proyecto}] ${ts.actividad}`,
+            title: `[${ts.cliente}] ${ts.proyecto}`,
             start: ts.fecha.slice(0, 10),
             end: ts.fecha.slice(0, 10),
+            client: ts.idcliente,
             project: ts.idproyecto,
             activity: ts.idactividad,
             hour: ts.hora,
@@ -141,7 +146,7 @@ export class CalendarComponent implements OnInit {
     },
     initialView: "dayGridMonth",
     themeSystem: "bootstrap",
-    weekends: false,
+    weekends: true,
     editable: true,
     selectable: true,
     selectMirror: true,
@@ -179,14 +184,16 @@ export class CalendarComponent implements OnInit {
   handleEventClick(clickInfo: EventClickArg) {
     this.editEvent = clickInfo.event;
     this.createFormEdit();
+    this.loadSelectProject();
     this.modalService.open(this.editmodalShow, { centered: true });
   }
 
   createFormEdit() {
     this.formEditData = this.formBuilder.group({
       editDate: [{ value: this.editEvent.start, disabled: true }],
+      editClient: [ this.editEvent.extendedProps['client'], [Validators.required]],
       editProject: [ this.editEvent.extendedProps['project'], [Validators.required]],
-      editActivity: [ this.editEvent.extendedProps['activity'], [Validators.required]],
+      editActivity: [ this.editEvent.extendedProps['activity'], []],
       editHour: [ this.editEvent.extendedProps['hour'], [Validators.required, Validators.min(1)]],
       editObservation: this.editEvent.extendedProps['observation'],
     });
@@ -286,6 +293,7 @@ export class CalendarComponent implements OnInit {
         this.submitted = false;
       });
     } else {
+      this.formData.markAllAsTouched();
       this.submitted = true;
     }
   }
@@ -299,7 +307,8 @@ export class CalendarComponent implements OnInit {
       return;
     }
 
-    const editDate = this.formEditData.get('editDate')!.value
+    const editDate = this.formEditData.get('editDate')!.value;
+    const editClient = this.formEditData.get('editClient')!.value;
     const editProject = this.formEditData.get('editProject')!.value;
     const editActivity = this.formEditData.get('editActivity')!.value;
     const editHour = this.formEditData.get('editHour')!.value;
@@ -309,13 +318,15 @@ export class CalendarComponent implements OnInit {
       fecha: editDate.toISOString().slice(0, 10),
       hora: editHour,
       observacion: editObservation,
+      cliente: editClient,
       projecto: editProject,
       actividad: editActivity,
     }
 
     this.timesheetService.editTimesheet(this.editEvent.id, body).subscribe(() => {
-      const title = `[${this.loadDescriptionCombox(this.projects, editProject)}] ${this.loadDescriptionCombox(this.activities, editActivity)}`;
+      const title = `[${this.loadDescriptionCombox(this.clients, editClient)}] ${this.loadDescriptionCombox(this.projects, editProject)}`;
       this.editEvent.setProp('title', title);
+      this.editEvent.setExtendedProp('client', editClient);
       this.editEvent.setExtendedProp('project', editProject);
       this.editEvent.setExtendedProp('activity', editActivity);
       this.editEvent.setExtendedProp('hour', editHour);
@@ -373,14 +384,26 @@ export class CalendarComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
+  changeClient() {
+    this.formEditData.get('editProject')?.setValue(null);
+    this.loadSelectProject();
+  }
+
+  loadSelectProject() {
+    const idclient = this.formEditData.get('editClient')?.value;
+    this._projectService.getByClient(idclient).subscribe(res => {
+      this.projects = res.data.map(r => { return { id: r.idproyecto, name: r.nombre } }) as [];
+    })
+  }
+
   loadDataSelects() {
     const params = { limit: '100', page: '1', filter: '', order: '' };
-    const projects$ = this._projectService.getProjects(params.limit, params.page, params.filter, params.order);
-    const activities$ = this._activityService.getActivities(params.limit, params.page, params.filter, params.order);
-    forkJoin([projects$, activities$]).subscribe(resp => {
-      this.projects = resp[0].data.map(r => { return { id: r.idproyecto, name: r.nombre } }) as [];
-      this.activities = resp[1].data.map(r => { return { id: r.idactividad, name: r.nombre } }) as [];
-    });
+    this._activityService.getActivities(params.limit, params.page, params.filter, params.order).subscribe(res => {
+      this.activities = res.data.map(r => { return { id: r.idactividad, name: r.nombre } }) as [];
+    })
+    this._clientService.getClients('100', '1', '', '').subscribe(res => {
+      this.clients = res.data.map(r => { return { id: r.idclient, name: r.nombre } }) as []
+    })
   }
 
   loadDescriptionCombox(list: any[], id: string): string {

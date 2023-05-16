@@ -45,4 +45,8 @@ export class ProjectService {
             { id: 3, name: 'Terminado' }
         ]
     }
+
+    getByClient(id: string) {
+        return this._http.get<IProjectRes>(`${URI}/project/client/${id}`);
+    }
 }

@@ -68,6 +68,16 @@
                         <!--end col-->
                         <div class="col-12">
                             <div class="mb-3">
+                                <label class="form-label">Cliente</label>
+                                <ng-select [items]="clients" formControlName="client" bindLabel="name" bindValue="id"
+                                    placeholder="Agregue un cliente" (change)="changeClient()"
+                                    [class.is-invalid]="submitted && form['client']!.errors">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-12">
+                            <div class="mb-3">
                                 <label class="form-label">Proyecto</label>
                                 <ng-select [items]="projects" formControlName="project" bindLabel="name" bindValue="id"
                                     placeholder="Agregue un proyecto"
@@ -136,6 +146,15 @@
                                         formControlName="editDate" [altInput]="true" altFormat="d/m/Y"
                                         [convertModelValue]="true" placeholder="Seleccione una fecha">
                                 </div>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Cliente</label>
+                                <ng-select [items]="clients" formControlName="editClient" bindLabel="name" bindValue="id"
+                                    placeholder="Agregue un cliente" (change)="changeClient()">
+                                </ng-select>
                             </div>
                         </div>
                         <!--end col-->
