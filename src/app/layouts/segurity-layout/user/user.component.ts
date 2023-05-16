@@ -46,6 +46,10 @@ export class UserComponent implements OnInit, OnDestroy {
 
   private searchSubject = new Subject<string>();
 
+  hasUpperCase = false;
+  hasLowerCase = false;
+  hasDigitOrSpecial = false;
+
   constructor(
     private _userService: UserService,
     private _fb: FormBuilder,
@@ -243,6 +247,13 @@ export class UserComponent implements OnInit, OnDestroy {
     this.roles$ = this._roleService.getRoles('100', '1', '', '').subscribe(resp => {
       this.roles = resp.data.map(r => { return { id: r.idrol, name: r.nombre } }) as [];
     });
+  }
+
+  validatePassword() {
+    const password = this.fModal['password'].value;
+    this.hasUpperCase = /[A-Z]/.test(password);
+    this.hasLowerCase = /[a-z]/.test(password);
+    this.hasDigitOrSpecial = /\d|\W/.test(password);
   }
 
   ngOnDestroy(): void {

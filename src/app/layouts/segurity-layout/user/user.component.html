@@ -109,9 +109,15 @@
                 </div>
                 <div class="col-lg-9">
                     <input type="password" class="form-control" id="password" placeholder="Ingrese password"
-                        formControlName="password"
+                        formControlName="password" (input)="validatePassword()"
                         [class.is-invalid]="fModal['password'].invalid && fModal['password'].touched">
-                </div>
+                    <div class="pwd-messages" *ngIf="fModal['password'].invalid && fModal['password'].touched">
+                        <p *ngIf="fModal['password'].hasError('pattern')">La contraseña debe cumplir con los requisitos siguientes:</p>
+                        <p *ngIf="fModal['password'].hasError('pattern') && !hasUpperCase">- Al menos una letra mayúscula.</p>
+                        <p *ngIf="fModal['password'].hasError('pattern') && !hasLowerCase">- Al menos una letra minúscula.</p>
+                        <p *ngIf="fModal['password'].hasError('pattern') && !hasDigitOrSpecial">- Al menos un dígito o un carácter especial.</p>
+                    </div>
+                </div>                
             </div>
             <div class="row mb-3">
                 <div class="col-lg-3">
