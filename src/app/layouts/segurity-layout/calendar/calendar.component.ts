@@ -170,7 +170,6 @@ export class CalendarComponent implements OnInit {
    * Event add modal
    */
   openModal(event?: any) {
-    console.log(event)
     this.createForm();
     const { date } = event;
     this.newEventDate = event,
@@ -184,7 +183,7 @@ export class CalendarComponent implements OnInit {
   handleEventClick(clickInfo: EventClickArg) {
     this.editEvent = clickInfo.event;
     this.createFormEdit();
-    this.loadSelectProject();
+    this.loadSelectProject(this.formEditData.get('editClient')?.value);
     this.modalService.open(this.editmodalShow, { centered: true });
   }
 
@@ -262,6 +261,7 @@ export class CalendarComponent implements OnInit {
   saveEvent() {
     if (this.formData.valid) {
       const date = this.formData.get('date')!.value;
+      const client = this.formData.get('client')!.value;
       const project = this.formData.get('project')!.value;
       const activity = this.formData.get('activity')!.value;
       const hour = this.formData.get('hour')!.value;
@@ -270,6 +270,7 @@ export class CalendarComponent implements OnInit {
         fecha: date.toISOString().slice(0, 10),
         hora: hour,
         observacion: observation,
+        cliente: client,
         projecto: project,
         actividad: activity
       }
@@ -277,9 +278,10 @@ export class CalendarComponent implements OnInit {
         const calendarApi = this.newEventDate.view.calendar;
         const event = {
           id: resp.data.idtimesheet,
-          title: `[${this.loadDescriptionCombox(this.projects, project)}] ${this.loadDescriptionCombox(this.activities, activity)}`,
+          title: `[${this.loadDescriptionCombox(this.clients, client)}] ${this.loadDescriptionCombox(this.projects, project)}`,
           start: date,
           end: date,
+          client,
           project,
           activity,
           hour,
@@ -385,12 +387,16 @@ export class CalendarComponent implements OnInit {
   }
 
   changeClient() {
-    this.formEditData.get('editProject')?.setValue(null);
-    this.loadSelectProject();
+    this.formData.get('project')?.setValue(null);
+    this.loadSelectProject(this.formData.get('client')?.value);
   }
 
-  loadSelectProject() {
-    const idclient = this.formEditData.get('editClient')?.value;
+  changeClientEdit() {    
+    this.formEditData.get('editProject')?.setValue(null);
+    this.loadSelectProject(this.formEditData.get('editClient')?.value);
+  }
+
+  loadSelectProject(idclient: string) {
     this._projectService.getByClient(idclient).subscribe(res => {
       this.projects = res.data.map(r => { return { id: r.idproyecto, name: r.nombre } }) as [];
     })
