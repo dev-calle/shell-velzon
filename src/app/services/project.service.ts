@@ -46,7 +46,9 @@ export class ProjectService {
         ]
     }
 
-    getByClient(id: string) {
-        return this._http.get<IProjectRes>(`${URI}/project/client/${id}`);
+    getByClient(cliente: string) {
+        let params = new HttpParams();
+        params = params.set('cliente', cliente);
+        return this._http.get<IProjectRes>(`${URI}/project/client/list/`, { params });
     }
 }

@@ -53,6 +53,8 @@ export class CalendarComponent implements OnInit {
   startStr: string = '';
   endStr: string = '';
 
+  projectsSearch = [];
+
   constructor(private modalService: NgbModal, private formBuilder: UntypedFormBuilder,
     private datePipe: DatePipe, private _projectService: ProjectService,
     private _activityService: ActivityService, private timesheetService: TimesheetService,
@@ -75,6 +77,7 @@ export class CalendarComponent implements OnInit {
 
   createFormSearch() {
     this.formSearch = this.formBuilder.group({
+      client: [],
       project: [],
       activity: []
     })
@@ -389,6 +392,15 @@ export class CalendarComponent implements OnInit {
   changeClient() {
     this.formData.get('project')?.setValue(null);
     this.loadSelectProject(this.formData.get('client')?.value);
+  }
+
+  changeClientSearch() {
+    this.formSearch.get('project')?.setValue(null);
+    const clients = this.formSearch.get('client')?.value.join(',');
+    if(!clients) return;
+    this._projectService.getByClient(clients).subscribe(res => {
+      this.projectsSearch = res.data.map(r => { return { id: r.idproyecto, name: r.nombre } }) as [];
+    })
   }
 
   changeClientEdit() {    

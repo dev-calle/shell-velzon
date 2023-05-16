@@ -9,21 +9,30 @@
                     <div class="card-body">
                         <form class="container mb-3" [formGroup]="formSearch" (ngSubmit)="onSearch()">
                             <div class="row">
-                                <div class="col-lg-2">
-                                    <label for="date" class="form-label my-1 float-end">Proyecto</label>
+                                <div class="col-lg-1">
+                                    <label for="date" class="form-label my-1">Cliente</label>
                                 </div>
-                                <div class="col-lg-3">
-                                    <ng-select [items]="projects" formControlName="project" bindLabel="name"
-                                        bindValue="id" placeholder="Agregue un proyecto" [multiple]="true"
+                                <div class="col-lg-2">
+                                    <ng-select [items]="clients" formControlName="client" bindLabel="name"
+                                        bindValue="id" placeholder="Seleccione cliente" [multiple]="true" (change)="changeClientSearch()"
+                                        [class.is-invalid]="formSearch.get('client')?.invalid && formSearch.get('client')?.touched">
+                                    </ng-select>
+                                </div>
+                                <div class="col-lg-1">
+                                    <label for="date" class="form-label my-1">Proyecto</label>
+                                </div>
+                                <div class="col-lg-2">
+                                    <ng-select [items]="projectsSearch" formControlName="project" bindLabel="name"
+                                        bindValue="id" placeholder="Seleccione proyecto" [multiple]="true"
                                         [class.is-invalid]="formSearch.get('project')?.invalid && formSearch.get('project')?.touched">
                                     </ng-select>
                                 </div>
-                                <div class="col-lg-2">
-                                    <label for="date" class="form-label my-1 float-end">Actividad</label>
+                                <div class="col-lg-1">
+                                    <label for="date" class="form-label my-1">Actividad</label>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-2">
                                     <ng-select [items]="activities" formControlName="activity" bindLabel="name"
-                                        bindValue="id" placeholder="Agregue una actividad" [multiple]="true"
+                                        bindValue="id" placeholder="Seleccione actividad" [multiple]="true"
                                         [class.is-invalid]="formSearch.get('activity')?.invalid && formSearch.get('activity')?.touched">
                                     </ng-select>
                                 </div>
