@@ -37,4 +37,12 @@ export class ProjectService {
     deleteProject(id: string) {
         return this._http.delete<any>(`${URI}/project/${id}`);
     }
+
+    getStates() {
+        return [
+            { id: 1, name: 'En Proceso' },
+            { id: 2, name: 'Stand By' },
+            { id: 3, name: 'Terminado' }
+        ]
+    }
 }

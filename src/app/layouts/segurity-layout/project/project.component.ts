@@ -7,6 +7,7 @@ import { AlertService } from 'src/app/services/alert.service';
 import { ColumnOrder } from 'src/app/interfaces/column-order.interface';
 import { ProjectService } from 'src/app/services/project.service';
 import { Project } from 'src/app/interfaces/project.interface';
+import { ClientService } from 'src/app/services/client.service';
 
 @Component({
   selector: 'app-project',
@@ -32,6 +33,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   columns: ColumnOrder[] = [
     { name: 'codigo', text: 'Código', active: false, order: true },
     { name: 'nombre', text: 'Nombre', active: false, order: true },
+    { name: 'cliente', text: 'Cliente', active: false, order: true },
     { name: 'estado', text: 'Estado', active: false, order: true },
     { name: 'editar', text: 'Editar', active: false, order: false },
     { name: 'eliminar', text: 'Eliminar', active: false, order: false }
@@ -39,11 +41,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   private searchSubject = new Subject<string>();
 
+  clients = [];
+  states = [];
+
   constructor(
     private _projectService: ProjectService,
     private _fb: FormBuilder,
     public _modalService: NgbModal,
-    private _alertService: AlertService
+    private _alertService: AlertService,
+    private _clientService: ClientService
   ) { }
 
   ngOnInit(): void {
@@ -51,6 +57,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.createformAddProject();
     this.onSearchFilter();
     this.onListprojects();
+    this.loadDataSelects();
   }
 
   get f() { return this.formSearch.controls; }
@@ -70,7 +77,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   createformAddProject() {
     this.formAddProject = this._fb.group({
       code: [null, []],
-      name: [null, [Validators.required]]
+      name: [null, [Validators.required]],
+      client: [null, [Validators.required]],
+      state: [null, [Validators.required]]
     })
   }
 
@@ -142,7 +151,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   buildformAddProject() {
     return {
-      nombre: this.fModal['name'].value
+      nombre: this.fModal['name'].value,
+      cliente: this.fModal['client'].value,
+      estado: this.fModal['state'].value
     }
   }
 
@@ -163,6 +174,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
   loadDataProjectForm(project: Project) {
     this.fModal['code'].setValue(project.codigo);
     this.fModal['name'].setValue(project.nombre);
+    this.fModal['client'].setValue(project.idcliente);
+    this.fModal['state'].setValue(project.idestado);
   }
 
   onDeleteProject(id: string = '', name: string) {
@@ -211,6 +224,29 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   getColumNameActive() {
     return this.columns.find(column => column.active && column.order)?.name ?? '';
+  }
+
+  loadDataSelects() {
+    this._clientService.getClients('100', '1', '', '').subscribe(res => {
+      this.clients = res.data.map(r => { return { id: r.idclient, name: r.nombre } }) as []
+    })
+    this.states = this._projectService.getStates() as [];
+  }
+
+  getStateClass(id: number) {
+    let classList = ['badge'];
+    switch(id) {
+      case 1: 
+        classList.push('bg-warning');
+        break;
+      case 2: 
+        classList.push('bg-danger');
+        break;
+      case 3: 
+        classList.push('bg-success');
+        break;
+    }
+    return classList;
   }
 
   ngOnDestroy(): void {

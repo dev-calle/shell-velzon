@@ -33,7 +33,8 @@
                     <tr *ngFor="let project of projects">
                         <th scope="row">{{ project.codigo }}</th>
                         <td>{{ project.nombre }}</td>
-                        <td><span class="badge bg-success">{{ project.estado }}</span></td>
+                        <td>{{ project.cliente }}</td>
+                        <td><span [ngClass]="getStateClass(project.idestado)">{{ project.idestado | estadoProject }}</span></td>
                         <td>
                             <button class="btn btn-secondary btn-sm" (click)="onEditProject(project.idproyecto, content)">
                                 <i class="ri-pencil-fill"></i>
@@ -78,6 +79,28 @@
                 <div class="col-lg-9">
                     <input type="text" class="form-control" id="name" placeholder="Ingrese nombre" formControlName="name"
                         [class.is-invalid]="fModal['name'].invalid && fModal['name'].touched">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="client" class="form-label">Cliente</label>
+                </div>
+                <div class="col-lg-9">
+                    <ng-select [items]="clients" formControlName="client" bindLabel="name"
+                        bindValue="id" placeholder="Seleccione un cliente"
+                        [class.is-invalid]="fModal['client'].invalid && fModal['client'].touched">
+                    </ng-select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <label for="state" class="form-label">Estado</label>
+                </div>
+                <div class="col-lg-9">
+                    <ng-select [items]="states" formControlName="state" bindLabel="name"
+                        bindValue="id" placeholder="Seleccione un estado"
+                        [class.is-invalid]="fModal['state'].invalid && fModal['state'].touched">
+                    </ng-select>
                 </div>
             </div>
         </form>

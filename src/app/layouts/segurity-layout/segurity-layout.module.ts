@@ -40,6 +40,7 @@ import { DatePipe } from '@angular/common';
 import { CalendarComponent } from './calendar/calendar.component';
 import { ReportComponent } from './report/report.component';
 import { ClientComponent } from './client/client.component';
+import { EstadoProjectPipe } from 'src/app/pipes/estado-project.pipe';
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -61,7 +62,8 @@ FullCalendarModule.registerPlugins([
     CalendarComponent,
     ReportComponent,
     ClientComponent,
-    EstadoPipe
+    EstadoPipe,
+    EstadoProjectPipe
   ],
   imports: [
     CommonModule,

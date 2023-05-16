@@ -3,5 +3,7 @@ export interface Project {
     codigo: string
     nombre: string
     idestado: number
-    estado: string
+    estado: string,
+    idcliente: string,
+    cliente: string
 }
