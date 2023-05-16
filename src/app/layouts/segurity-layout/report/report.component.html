@@ -6,7 +6,7 @@
         <form class="container mb-3" [formGroup]="formSearch" (ngSubmit)="onSearch()">
             <div class="row">
                 <div class="col-lg-2">
-                    <label for="date" class="form-label my-1 float-end">Fecha de inicio</label>
+                    <label for="date" class="form-label my-1">Fecha de inicio</label>
                 </div>
                 <div class="col-lg-3">
                     <input class="form-control flatpickr-input" type="text" mwlFlatpickr
@@ -15,7 +15,7 @@
                 </div>
                 
                 <div class="col-lg-2">
-                    <label for="date" class="form-label my-1 float-end">Fecha de fin</label>
+                    <label for="date" class="form-label my-1">Fecha de fin</label>
                 </div>
                 <div class="col-lg-3">
                     <input class="form-control flatpickr-input" type="text" mwlFlatpickr
@@ -26,16 +26,27 @@
             </div>
             <div class="row mt-3">
                 <div class="col-lg-2">
-                    <label for="date" class="form-label my-1 float-end">Proyecto</label>
+                    <label for="date" class="form-label my-1">Cliente</label>
+                </div>
+                <div class="col-lg-3">
+                    <ng-select [items]="clients" formControlName="client" bindLabel="name"
+                        bindValue="id" placeholder="Agregue un cliente" [multiple]="true" (change)="changeClientSearch()"
+                        [class.is-invalid]="formSearch.get('client')?.invalid && formSearch.get('client')?.touched">
+                    </ng-select>
+                </div>
+                <div class="col-lg-2">
+                    <label for="date" class="form-label my-1">Proyecto</label>
                 </div>
                 <div class="col-lg-3">
                     <ng-select [items]="projects" formControlName="project" bindLabel="name"
                         bindValue="id" placeholder="Agregue un proyecto" [multiple]="true"
                         [class.is-invalid]="formSearch.get('project')?.invalid && formSearch.get('project')?.touched">
                     </ng-select>
-                </div>
+                </div>                
+            </div>
+            <div class="row mt-3">
                 <div class="col-lg-2">
-                    <label for="date" class="form-label my-1 float-end">Actividad</label>
+                    <label for="date" class="form-label my-1">Actividad</label>
                 </div>
                 <div class="col-lg-3">
                     <ng-select [items]="activities" formControlName="activity" bindLabel="name"
@@ -43,12 +54,10 @@
                         [class.is-invalid]="formSearch.get('activity')?.invalid && formSearch.get('activity')?.touched">
                     </ng-select>
                 </div>
-            </div>
-            <div class="row mt-3">
                 <div class="col-lg-2">
-                    <label for="date" class="form-label my-1 float-end">Usuario</label>
+                    <label for="date" class="form-label my-1">Usuario</label>
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-3">
                     <ng-select [items]="users" formControlName="users" bindLabel="name"
                         bindValue="id" placeholder="Agregue un usuario" [multiple]="true"
                         [class.is-invalid]="formSearch.get('users')?.invalid && formSearch.get('users')?.touched">
@@ -75,9 +84,10 @@
                 <tbody>
                     <tr *ngFor="let event of eventsTimesheet">
                         <td>{{ event.fecha | date: 'dd/MM/YYYY HH:mm a' }}</td>
+                        <td>{{ event.cliente }}</td>
                         <td>{{ event.proyecto }}</td>
                         <td>{{ event.actividad }}</td>
-                        <td>{{ event.usuario }}</td>
+                        <td>{{ event.usuarionombre }} {{ event.usuarioapellido }}</td>
                         <td>{{ event.hora }}</td>
                         <td>{{ event.observacion }}</td>
                     </tr>

@@ -114,9 +114,10 @@ export class CalendarComponent implements OnInit {
   }
 
   private loadEvents() {
+    const client = this.formSearch.get('client')?.value as string[];
     const project = this.formSearch.get('project')?.value as string[];
     const activity = this.formSearch.get('activity')?.value as string[]; 
-    this.timesheetService.getEvents('1', this.startStr, this.endStr, project?.join(','), activity?.join(','))
+    this.timesheetService.getEvents('1', this.startStr, this.endStr, client?.join(','), project?.join(','), activity?.join(','))
       .pipe(
         map(resp => resp.data.filter(event => !this.currentIdEvents.includes(event.idtimesheet)))
       )

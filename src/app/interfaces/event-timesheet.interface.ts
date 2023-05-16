@@ -16,7 +16,9 @@ export interface EventTimesheet {
     proyecto: string
     idactividad: string
     actividad: string
-    usuario: string
+    usuarionombre: string
+    usuarioapellido: string
+    usuariocorreo: string
     estado: string
     idcliente: string
     cliente: string
