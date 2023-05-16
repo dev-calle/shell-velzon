@@ -392,13 +392,21 @@ export class CalendarComponent implements OnInit {
 
   changeClient() {
     this.formData.get('project')?.setValue(null);
-    this.loadSelectProject(this.formData.get('client')?.value);
+    const client = this.formData.get('client')?.value;
+    if(!client) {
+      this.projects = [];
+      return;
+    };
+    this.loadSelectProject(client);
   }
 
   changeClientSearch() {
     this.formSearch.get('project')?.setValue(null);
     const clients = this.formSearch.get('client')?.value.join(',');
-    if(!clients) return;
+    if(!clients) {
+      this.projectsSearch = [];
+      return;
+    };
     this._projectService.getByClient(clients).subscribe(res => {
       this.projectsSearch = res.data.map(r => { return { id: r.idproyecto, name: r.nombre } }) as [];
     })
